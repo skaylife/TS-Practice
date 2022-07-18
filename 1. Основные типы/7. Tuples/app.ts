@@ -1,6 +1,5 @@
 const skill: [number, string] = [1, 'Dev'];
 
-const [id, skillName] = skill;
+skill[0] = 2;
 
-// Spreed arr
-const arr: [number, string, ...boolean[]] = [1, 'sss', true, true, false]
+skill[0] = 3;
