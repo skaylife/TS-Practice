@@ -1,7 +1,10 @@
-let revenue: number = 1000;
-let bonus: number = 500; 
-let c: string = "text";
-let d: boolean = true;
+function getFullName(firstName: string, surname: string): string {
+    return `${firstName} ${surname}`; //?
+} 
 
-let res: number = revenue + bonus;
-console.log(res);
+// Пример стрелочной функции. 
+const getFullNameArrow = (firstName: string, surname: string): string => {
+    return `${firstName} ${surname}`;
+} 
+
+console.log(getFullName('Семен', 'Кирил'));
