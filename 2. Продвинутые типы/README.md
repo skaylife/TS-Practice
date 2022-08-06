@@ -8,7 +8,9 @@
 
 [3. Type Aliases ](#Type_Aliases)
 
-## 1. Union Тип - ([К списку других тем](#start)) <a name="Union_Тип"></a> 
+[4. Interface ](#4)
+
+## 1. Union Тип <a name="Union_Тип"></a> 
 Union тип - который может нескольких типов.
 
 Например : 
@@ -31,7 +33,9 @@ function loginId(id: string | number | boolean) {
 В первой проверке мы можем примнять к `id` только методы которые можно применить к string. 
 И к другим аналогично. 
 
-## 2. Literal Types - ([К списку других тем](#start)) <a name="Literal_Types"></a> 
+### - ([К списку других тем](#start)) 
+
+## 2. Literal Types <a name="Literal_Types"></a> 
 Литеральный тип - явялется точной переменной от JavaScript
 
 Пример: 
@@ -73,8 +77,9 @@ fetchWithAuth('s', method)
 let method = 'post'
 fetchWithAuth('s', method as 'post')
 ```
+### - ([К списку других тем](#start)) 
 
-## 3. Type Aliases - ([К списку других тем](#start)) <a name="Type_Aliases"></a> 
+## 3. Type Aliases  <a name="Type_Aliases"></a> 
 
 Type Aliases -  создание типов, и их дальнешее использование.
 
@@ -113,3 +118,38 @@ let user: UserWithRole = {
     id: 1
 }
 ```
+
+### - ([К списку других тем](#start)) 
+
+## 4. Interface <a name="4"></a> 
+
+Использование iterface
+Пример кода:
+```
+interface Role {
+    roleId: number
+}
+
+interface UserWithRoleAlt extends User, Role {
+    createAt: Date;
+}
+
+let user: UserWithRoleAlt = {
+    name : 'Petr',
+    age: 11,
+    skills: ['1', '2'],
+    roleId: 1,
+    createAt: new Date(),
+
+    log(id) {
+        return ''
+    }
+}
+
+interface UserDic {
+     // Мы получаем ключем ялвяется index, а значением User
+    [index: number] : User
+}
+```
+
+### - ([К списку других тем](#start)) 
