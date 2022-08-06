@@ -1,8 +1,8 @@
-#TS-Practice
+# TS-Practice
 
-###Начало изучения TypeScript 17.07.2022 г. (конец Июля)
+###Н ачало изучения TypeScript 17.07.2022 г. (конец Июля)
 
-####Команда для установки TypeScript глобально
+#### Команда для установки TypeScript глобально
 `npm i -g typescript`
 
 `tsc --init` - инициализация TS | будет создан файл tsconfig.json
