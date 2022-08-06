@@ -1,6 +1,6 @@
 # Продвинутые Типы
 
-## Содержание и быстрое перемещение по темам
+## Содержание и быстрое перемещение по темам <a name="start">
 
 [1. Union Тип ](#Union_Тип)
 
@@ -8,7 +8,7 @@
 
 [3. Type Aliases ](#Type_Aliases)
 
-## 1. Union Тип <a name="Union_Тип"></a> 
+## 1. Union Тип [К списку других тем](#start) <a name="Union_Тип"></a> 
 Union тип - который может нескольких типов.
 
 Например : 
@@ -31,7 +31,7 @@ function loginId(id: string | number | boolean) {
 В первой проверке мы можем примнять к `id` только методы которые можно применить к string. 
 И к другим аналогично. 
 
-## 2. Literal Types <a name="Literal_Types"></a> 
+## 2. Literal Types [К списку других тем](#start) <a name="Literal_Types"></a> 
 Литеральный тип - явялется точной переменной от JavaScript
 
 Пример: 
@@ -74,4 +74,43 @@ let method = 'post'
 fetchWithAuth('s', method as 'post')
 ```
 
-## 3. Type Aliases <a name="Type_Aliases"></a> 
+## 3. Type Aliases [К списку других тем](#start) <a name="Type_Aliases"></a> 
+
+Type Aliases -  создание типов, и их дальнешее использование.
+
+Пример:
+
+```
+// Старая запись (типизация)
+let userOld: {
+    name: string,
+    age: number,
+    skills: string[]
+} = {
+    name : 'Petr',
+    age: 11,
+    skills: ['1', '2']
+}
+
+// Типизация через Aliases
+
+type User = {
+    name: string,
+    age: number,
+    skills: string[]
+}
+
+// Добавление еще одного типа
+type Role = {
+    id: number;
+}
+//  Использоваение нового типа id (Объеденение)
+type UserWithRole = User & Role;
+
+let user: UserWithRole = {
+    name : 'Petr',
+    age: 11,
+    skills: ['1', '2'],
+    id: 1
+}
+```
