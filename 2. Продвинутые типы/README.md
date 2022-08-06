@@ -8,7 +8,7 @@
 
 [3. Type Aliases ](#Type_Aliases)
 
-## 1. Union Тип [К списку других тем](#start) <a name="Union_Тип"></a> 
+## 1. Union Тип - ([К списку других тем](#start)) <a name="Union_Тип"></a> 
 Union тип - который может нескольких типов.
 
 Например : 
@@ -31,7 +31,7 @@ function loginId(id: string | number | boolean) {
 В первой проверке мы можем примнять к `id` только методы которые можно применить к string. 
 И к другим аналогично. 
 
-## 2. Literal Types [К списку других тем](#start) <a name="Literal_Types"></a> 
+## 2. Literal Types - ([К списку других тем](#start)) <a name="Literal_Types"></a> 
 Литеральный тип - явялется точной переменной от JavaScript
 
 Пример: 
@@ -74,7 +74,7 @@ let method = 'post'
 fetchWithAuth('s', method as 'post')
 ```
 
-## 3. Type Aliases [К списку других тем](#start) <a name="Type_Aliases"></a> 
+## 3. Type Aliases - ([К списку других тем](#start)) <a name="Type_Aliases"></a> 
 
 Type Aliases -  создание типов, и их дальнешее использование.
 
@@ -93,7 +93,6 @@ let userOld: {
 }
 
 // Типизация через Aliases
-
 type User = {
     name: string,
     age: number,
