@@ -1,13 +1,20 @@
 
-interface User {
-    name: string 
-}
+// interface User {
+//     name: string 
+// }
 
-interface User {
-    age: number;
-}
+// interface User {
+//     age: number;
+// }
 
-const user: User = {
-    name: 'as',
-    age: 33
+// const user: User = {
+//     name: 'as',
+//     age: 33
+// }
+
+
+type ID = string | number;
+
+interface IDi {
+    ID: string | number
 }

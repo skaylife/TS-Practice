@@ -12,6 +12,8 @@
 
 [5. Types или Interfaces ](#5)
 
+[6. Optional - Опциональные свойства ](#5)
+
 
 ## 1. Union Тип <a name="Union_Тип"></a> 
 Union тип - который может нескольких типов.
@@ -160,7 +162,28 @@ interface UserDic {
 ## 5. Types или Interfaces <a name="5"></a> 
 
 Type - используется в основном для примитивных типов
+
 Interfaces - рекомендуется к использованию
 
 ### - ([К списку других тем](#start)) 
 
+## 6. Optional - Опциональные свойства <a name="6"></a>
+
+Типы которые могут быть необязательные использется - ? 
+
+`second?: number`
+`second!: number` - обязательный парметр что данные обязательные и будут типа `number`
+
+```
+interface User {
+    login: string;
+    password?: string; // ? - обозначает опциональность данного поля
+    password: string | undefined; // обозначает опциональность данного поля но оно должно быть
+}
+
+function test(param?: string) {
+    const t = param ?? multiply(5); // Проверка если params = null или undefined, если да то выполняем функцию multiply
+}
+```
+
+### - ([К списку других тем](#start)) 
