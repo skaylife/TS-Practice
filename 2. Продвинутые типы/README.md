@@ -187,3 +187,75 @@ function test(param?: string) {
 ```
 
 ### - ([К списку других тем](#start)) 
+
+## 7. Типизация ответа от сервера <a name="6"></a>
+
+Типизация JSON Запроса
+
+```
+// Запрос в виде платежа
+{
+    "sum": 10000,
+    "from": 2,
+    "to": 4
+}
+// Ответ 
+[
+    {
+        "status": "success",
+        "data": {
+            "databaseId": 567,
+            "sum": 10000,
+            "from": 2,
+            "to": 4
+        }
+    },
+    {
+        "status": "failed",
+        "data": {
+            "errorMessage": "Недостаточно средств",
+            "errorCode": 4
+        }
+    }
+]
+
+
+```
+Типизация на основе interface 
+```
+interface IPayment {
+    sum: number
+    from: number
+    to: number
+}
+
+enum PaymentStatus {
+    success = "success",
+    failed = "failed"
+}
+
+interface IPaymentRequest extends IPayment {}
+
+interface IDataFailed {
+    errorMessage: string,
+    errorCode: number
+}
+
+interface IDataSuccess extends IPayment {
+    databaseId: number;
+}
+
+interface IResSuccess {
+    status: PaymentStatus.success 
+    data: IDataSuccess
+}
+
+interface IResFailed {
+    status: PaymentStatus.failed
+    data: IDataFailed
+}
+
+```
+
+### - ([К списку других тем](#start)) 
+
