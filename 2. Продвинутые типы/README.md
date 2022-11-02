@@ -12,7 +12,11 @@
 
 [5. Types или Interfaces ](#5)
 
-[6. Optional - Опциональные свойства ](#5)
+[6. Optional - Опциональные свойства ](#6)
+
+[7. Типизация - ответа от сервера ](#7)
+
+[8. Void ](#8)
 
 
 ## 1. Union Тип <a name="Union_Тип"></a> 
@@ -188,7 +192,7 @@ function test(param?: string) {
 
 ### - ([К списку других тем](#start)) 
 
-## 7. Типизация ответа от сервера <a name="6"></a>
+## 7. Типизация ответа от сервера <a name="7"></a>
 
 Типизация JSON Запроса
 
@@ -257,5 +261,28 @@ interface IResFailed {
 
 ```
 
+### - ([К списку других тем](#start)) 
+
+## 8. Void <a name="8"></a>
+
+#### Объявление тип void
+```
+function logId(id: string | number): void {
+    console.log(id);
+}
+```
+#### Разница между void и undefinded 
+в том что если стотит `undefinded` тот там не может быть другого типа 
+
+но напротив в `void` может быть и `undefinded` и любой другой тип.
+```
+const skills = ['Dev', 'DevOps'];
+
+const user = {
+    s: ['s']
+}
+
+skills.forEach((skill) => user.s.push(skill));
+```
 ### - ([К списку других тем](#start)) 
 
