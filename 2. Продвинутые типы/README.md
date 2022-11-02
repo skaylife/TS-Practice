@@ -323,6 +323,37 @@ type U1 = unknown | null;  // Если есть вариант с unknown, то 
 
 type I1 = unknown & string; // Интерсектион - то здесь будет тип string
 ```
+### - ([К списку других тем](#start)) 
+
+## 10. Never - (никогда не будет возрата) <a name="10"></a>
+
+### (никогда не будет возрата у функции)
+```
+function generateError(message: string): never {
+    throw new Error(message) // Данная функция никогда не вернется 
+}
+```
+
+### Как один из примера бесконесного цикла у которого не будет возврата 
+```
+function dumpErorr(): never {
+    while (true) {
+
+    }
+}
+```
+Пример кода
+```
+function isString(x: string | number): boolean {
+    if (typeof x === 'string') {
+        return true;
+    } else if (typeof x === 'number') { // Проверка на тот случай если попадет undefinded
+        return false;
+    }
+    generateError('ssss Error')
+}
+```
+
 
 ### - ([К списку других тем](#start)) 
 
