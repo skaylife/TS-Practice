@@ -26,6 +26,8 @@
 
 [12. Приведение переменных к типу (конвертация) ](#12)
 
+[13. Type Guard - ограничение типов ](#13)
+
 
 ## 1. Union Тип <a name="Union_Тип"></a> 
 Union тип - который может нескольких типов.
@@ -448,6 +450,37 @@ function userToAdmin(user: User): Admin {
 ```
 
 ### - ([К списку других тем](#start)) 
+
+## 13. Type Guard - ограничение типов <a name="13"></a>
+
+Ограничение типов `объявление user взято из примаера кода выше` ([12 тема](#12)) 
+
+```
+function isString(x: string | number): x is string {
+    return typeof x === 'string'
+}
+
+function isAdmin(user: User | Admin): user is Admin {
+    return 'role' in user; 
+}
+
+function isAdminAleternative(user: User | Admin): user is Admin {
+    return (user as Admin).role !== 'undefined';
+}
+
+function setRoleZero(user: User | Admin) {
+    if (isAdmin(user)) {
+        user.role = 0
+    } else {
+        throw new Error('Пользователь не Админ')
+    }
+}
+```
+
+### - ([К списку других тем](#start)) 
+
+
+
 
 
 
