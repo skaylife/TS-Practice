@@ -24,6 +24,8 @@
 
 [11. Null ](#11)
 
+[12. Приведение переменных к типу (конвертация) ](#12)
+
 
 ## 1. Union Тип <a name="Union_Тип"></a> 
 Union тип - который может нескольких типов.
@@ -365,7 +367,7 @@ function isString(x: string | number): boolean {
 
 Если ожидается пустой объект, то нужно испольщовать `null`
 
-`undefined` понимается что объект должен быть, а его нет.
+Под `undefined` понимается что объект должен быть, а его нет.
 
 Пример кода :
 
@@ -389,6 +391,58 @@ function getUser(): User {
         return {
             name: 'Сергей'
         } as User 
+    }
+}
+```
+
+### - ([К списку других тем](#start)) 
+
+## 12. Приведение переменных к типу (конвертация) <a name="12"></a>
+
+Пример ковертации из олного типа в другой, можно использовать все методы по конвертации из JS 
+```
+let a = 5; 
+let b: string = a.toString() // Преобразование типа number в string
+let e: string = new String(a).valueOf() // String с большой буквы это конструктор типов 
+let f: boolean = new Boolean(a).valueOf() 
+
+let c = 'asd';
+let d: number = parseInt(c);
+```
+
+```
+// Создание интерфеса для пользователя с необходимыми типами
+interface User { 
+    name: string;
+    email: string;
+    login: string;
+}
+
+// Создание юзера с тпипами в интерфесе User 
+const user: User = {
+    name: 'Семен',
+    email: 'semen@22.org',
+    login: 'vasya'
+}  
+
+// Создание интерфеса для Админа с именем и ролью 
+interface Admin {
+    name: string;
+    role: number;
+}
+
+// Присвоение переменной admin типа interface Admin
+// В этом случае у аdmin будет, содержаться и email и login 
+const admin: Admin = {
+    ...user,
+    role: 1
+}
+
+// Если использовать подобный подход, то тогда будет только у admin'a свойтво name = 'Семен'
+function userToAdmin(user: User): Admin {
+    return {
+        name: user.name,
+        role: 1
     }
 }
 ```
