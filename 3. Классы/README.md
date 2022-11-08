@@ -8,6 +8,8 @@
 
 [2. Конструктор (вариации) ](#2)
 
+[3. Методы классов ](#2)
+
 ## 1. Создание класса <a name="1"></a> 
 
 - `constructor(name: string)` - передаем необходимые свойства класса. пр. #1
@@ -64,8 +66,51 @@ class User {
         if (typeof age === 'number') {
             this.age = age;
         }
-        } 
+    } 
 }
+```
+
+### - ([К списку других тем](#start))
+
+## 3. Методы классов <a name="3"></a> 
+
+Метод класса `getPaymentLifeTime()`, и метод `unholdPayment(): void` (он ничего не возвращает, поэтому тип `void`)
+
+```
+enum PaymentStatus {
+    Holded,
+    Processed, 
+    Reversed
+}
+
+class Payment {
+    id: number;
+    status: PaymentStatus = PaymentStatus.Holded;
+    createdAt: Date = new Date();
+    updateAt: Date;
+
+    constructor(id:  number) {
+        this.id = id;
+    }
+// Пример созданных методов класса
+    getPaymentLifeTime(): number {
+        return new Date().getTime() - this.createdAt.getTime(); // Возрат времени жизни платежа
+    }
+
+    unholdPayment(): void {
+        if (this.status == PaymentStatus.Processed) {
+            throw new Error('Платеж не может быть возвращен');
+        }
+        this.status = PaymentStatus.Reversed
+    }
+}
+// Вызов методов 
+const payment = new Payment(1);
+payment.unholdPayment();
+console.log(payment)
+const time = payment.getPaymentLifeTime();
+// payment.status = PaymentStatus.Reversed;
+console.log(time);
 ```
 
 ### - ([К списку других тем](#start)) 
