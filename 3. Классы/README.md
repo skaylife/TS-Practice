@@ -8,7 +8,9 @@
 
 [2. Конструктор (вариации) ](#2)
 
-[3. Методы классов ](#2)
+[3. Методы классов ](#3)
+
+[4. Перегрузка сигнатуры ](#4)
 
 ## 1. Создание класса <a name="1"></a> 
 
@@ -112,5 +114,54 @@ const time = payment.getPaymentLifeTime();
 // payment.status = PaymentStatus.Reversed;
 console.log(time);
 ```
+
+### - ([К списку других тем](#start))
+
+## 4. Перегрузка сигнатуры <a name="4"></a> 
+
+И еще одна небольшая деталь: если ваши сигнатуры перегрузки возвращают разные типы, то в сигнатуре реализации нужно использовать не логическое «или», а логическое «и»: `"Хабр"`
+
+Тело Сигнатруры перегрузки.
+
+Идея в том что мы заранее можем объявить какие можно будете предовать аргументы в функцию
+
+А потом есть и дальше есть проверка через `typeof` тела функции. 
+```
+function run(   distances: number): string
+function run(   distances: string): number
+function run(   distances: number | string): number | string
+```
+
+Релизация сигнатуры перегрузки
+
+```
+    if(typeof distances == 'string') {
+        return 1;
+    } else {
+        return '';
+    }
+}   
+run()
+```
+
+Весь код
+
+```
+function run(   distances: number): string
+function run(   distances: string): number
+function run(   distances: number | string): number | string {
+    if(typeof distances == 'string') {
+        return 1;
+    } else {
+        return '';
+    }
+}   
+
+run()
+```
+
+
+[Статья на хабре про - Сигнатуру перегрузки, более подробно](https://habr.com/ru/company/otus/blog/688270/)
+`https://habr.com/ru/company/otus/blog/688270/`
 
 ### - ([К списку других тем](#start)) 
