@@ -14,6 +14,8 @@
 
 [5. Getter и Setter ](#5)
 
+[6. Implements - имплементация (передача объекту каких то свойтв)  ](#6)
+
 ## 1. Создание класса <a name="1"></a> 
 
 - `constructor(name: string)` - передаем необходимые свойства класса. пр. #1
@@ -210,6 +212,55 @@ class User {
 const user = new User(); 
 user.Login = 'MyLogin';
 console.log(user);
+```
+
+### - ([К списку других тем](#start))
+
+## 6. Implements - имплементация (передача объекту каких то свойтв) <a name="6"></a> 
+
+**Implements имплементация-** передача из интерфеса каких то свойств, но в самом классе есть надо их тоже описать. *(также там их можно расширить, если в `interface` отсутвует какой то тип, то этот тип можнон добавить в самом классе, в примере в коде)
+
+-Объявление и создание класса с имплементацией `IPayable`, и `IDeletable`  
+
+-Имплементация происходи командой `implements`
+`class User implements IPayable, IDeletable`
+
+Описание интерфейса - для дальнейшей имплементации
+```
+interface IPayable {
+    pay(paymentId: number): void;
+    price?: number;
+}
+```
+
+Код из класса `User`
+У `pay(paymentId: number |` добавляется еще и `string`, что дает возможность предачи строки в объект свойств.
+```
+    pay(paymentId: number | string): void {
+        throw new Error('Method not implemented')
+    }
+```
+
+Весь код
+```
+interface IPayable {
+    pay(paymentId: number): void;
+    price?: number;
+}
+
+interface IDeletable {
+    delete(): void;
+}
+
+class User implements IPayable, IDeletable {
+    delete(): void {
+        throw new Error("Method not implemented.");
+    }
+    pay(paymentId: number | string): void {
+        throw new Error('Method not implemented')
+    }
+    price?: number | undefined;
+}
 ```
 
 ### - ([К списку других тем](#start)) 
