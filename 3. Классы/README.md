@@ -12,6 +12,8 @@
 
 [4. Перегрузка сигнатуры ](#4)
 
+[5. Getter и Setter ](#5)
+
 ## 1. Создание класса <a name="1"></a> 
 
 - `constructor(name: string)` - передаем необходимые свойства класса. пр. #1
@@ -163,5 +165,51 @@ run()
 
 [Статья на хабре про - Сигнатуру перегрузки, более подробно](https://habr.com/ru/company/otus/blog/688270/)
 `https://habr.com/ru/company/otus/blog/688270/`
+
+### - ([К списку других тем](#start))
+
+## 5. Getter и Setter <a name="5"></a> 
+
+**Не поддерживает аснихронный подход!**
+
+`Setter` - устанваливает занчение. 
+
+```
+    // Сам Setter
+    set Login(l: string) {
+        this._login = 'user-' + l;
+    } 
+```
+
+`Getter` - возвращает значение. 
+
+```
+    // Сам Getter
+    get Login() {
+        return 'No Login';
+    }
+```
+
+Пример кода
+```
+class User {
+    _login: string;
+    password: string;
+
+    // Сам Setter
+    set Login(l: string) {
+        this._login = 'user-' + l;
+    } 
+
+    // Сам Getter
+    get Login() {
+        return 'No Login';
+    }
+}
+
+const user = new User(); 
+user.Login = 'MyLogin';
+console.log(user);
+```
 
 ### - ([К списку других тем](#start)) 
