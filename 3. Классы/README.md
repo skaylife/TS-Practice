@@ -16,6 +16,8 @@
 
 [6. Implements - имплементация (передача объекту каких то свойтв)  ](#6)
 
+[7. Extends - наследование и override )  ](#7)
+
 ## 1. Создание класса <a name="1"></a> 
 
 - `constructor(name: string)` - передаем необходимые свойства класса. пр. #1
@@ -220,9 +222,9 @@ console.log(user);
 
 **Implements имплементация-** передача из интерфеса каких то свойств, но в самом классе есть надо их тоже описать. *(также там их можно расширить, если в `interface` отсутвует какой то тип, то этот тип можнон добавить в самом классе, в примере в коде)
 
--Объявление и создание класса с имплементацией `IPayable`, и `IDeletable`  
+- Объявление и создание класса с имплементацией `IPayable`, и `IDeletable`  
 
--Имплементация происходи командой `implements`
+- Имплементация происходит командой `implements`
 `class User implements IPayable, IDeletable`
 
 Описание интерфейса - для дальнейшей имплементации
@@ -236,9 +238,9 @@ interface IPayable {
 Код из класса `User`
 У `pay(paymentId: number |` добавляется еще и `string`, что дает возможность предачи строки в объект свойств.
 ```
-    pay(paymentId: number | string): void {
-        throw new Error('Method not implemented')
-    }
+pay(paymentId: number | string): void {
+    throw new Error('Method not implemented')
+}
 ```
 
 Весь код
@@ -260,6 +262,62 @@ class User implements IPayable, IDeletable {
         throw new Error('Method not implemented')
     }
     price?: number | undefined;
+}
+```
+
+### - ([К списку других тем](#start))
+
+## 7. Extends - наследование и override <a name="7"></a> 
+
+- Через `extends` можно наследовать свойства и методы `class'a` для использования в другом классе. 
+
+- `override` (модификатор) - Чтобы своевременно обнаружить изменение в сигнатуре метода у класса-предка (или интерфейса) (для переопределения существующего класса). 
+
+- `constructor` - это специальный метод, служащий для создания и инициализации объектов, созданных с использованием `class`.
+
+[Ссылка на документацию по методу constructor](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Classes/constructor)
+
+- В конструкторе ключевое слово super() используется как функция, вызывающая родительский конструктор. Её необходимо вызвать до первого обращения к ключевому слову this в теле конструктора. Ключевое слово super также может быть использовано для вызова функций родительского объекта.
+
+[Ссылка на документацию по методу super](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Operators/super)
+
+Пример кода:
+```
+type PaymentStatus = 'new' | 'paid';
+
+class Payment {
+    id: number;
+    status: PaymentStatus = 'new';
+
+    constructor(id: number) {
+        this.id = id;
+    }
+
+    pay() {
+        this.status = 'paid';
+    }
+}
+
+class PersistentPayment extends Payment {
+    databaseId: number;
+    paidAt: Date;
+        
+    constructor() {
+        const id = Math.random();
+        super(id);
+    }
+
+    save() {
+        // Сохранение в базу данных
+    }
+
+    // override pay(date?: Date) { // override (модификатор)
+    pay(date?: Date) { // overrid (модификатор)
+        super.pay(); // Можно сразу наследовать все от родителя extends но если метод будет удален, будет ошибка
+        if(date) {
+            this.paidAt = date;
+        }
+    }
 }
 ```
 
