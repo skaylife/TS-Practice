@@ -1,58 +1,49 @@
-type PaymentStatus = 'new' | 'paid';
+class User {
+    name: string;
+
+    constructor(name: string) {
+        this.name = name;
+    }
+}
+
+class Users extends Array<User> {
+    searchByName(name: string) {
+        return this.filter(u => name === name)
+    }
+
+    override toString(): string {
+        return this.map(u => u.name).join(',');
+    }
+}
+
+const users = new Users();
+users.push(new User('Вася'));
+users.push(new User('Александр'));
+console.log(users.toString());
+
+class UserList {
+    users: User[];
+
+    push(u: User) {
+        this.users.push(u);
+    }
+}
 
 class Payment {
-    id: number;
-    status: PaymentStatus = 'new';
-
-    constructor(id: number) {
-        this.id = id;
-    }
-
-    pay() {
-        this.status = 'paid';
-    }
+    date: Date;
 }
 
-class PersistentPayment extends Payment {
-    databaseId: number;
-    paidAt: Date;
-        
-    constructor() {
-        const id = Math.random();
-        super(id);
-    }
-
-    save() {
-        // Сохранение в базу данных
-    }
-
-    // override pay(date?: Date) { // overrid (модификатор)
-    pay(date?: Date) { // overrid (модификатор)
-        super.pay();
-        if(date) {
-            this.paidAt = date;
-        }
-    }
+class UserWithPayment extends Payment {
+    name: string;
 }
 
-// new Payment().
-// new PersistentPayment().
+class UserWithPayment2 extends Payment {
+    user: User;
+    payment: Payment;
 
-// Вторая часть (2)
-
-class User {
-    name: string = 'user';
-
-    constructor() {
-        console.log(this.name)
-    }
-}
-
-class Admin extends User {
-    name: string = 'admin';
-
-    constructor() {
+    constructor(user: User, payment: Payment) {
         super();
-        console.log(this.name);
+        this.payment = payment;
+        this.user = user;
     }
 }

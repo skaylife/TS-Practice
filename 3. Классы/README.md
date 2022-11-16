@@ -20,6 +20,8 @@
 
 [8. Extends - наследование 2 ЧАСТЬ](#8)
 
+[9. Композиция против наследования](#9)
+
 ## 1. Создание класса <a name="1"></a> 
 
 - `constructor(name: string)` - передаем необходимые свойства класса. пр. #1
@@ -346,6 +348,36 @@ class Admin extends User {
     constructor() {
         super();
         console.log(this.name);
+    }
+}
+```
+
+### - ([К списку других тем](#start))
+
+## 9. Композиция против наследования<a name="9"></a> 
+
+Композиция кода нужна для отсутвия жесткой связанности сущностей, и в том случае если у нас кардинально разные объекты и разные у них задачи. 
+
+в констуркторе (`constructor()`) у нас задется композиция. 
+
+Пример кода 
+```
+class Payment {
+    date: Date;
+}
+
+class UserWithPayment extends Payment {
+    name: string;
+}
+
+class UserWithPayment2 extends Payment {
+    user: User;
+    payment: Payment;
+
+    constructor(user: User, payment: Payment) {
+        super();
+        this.payment = payment;
+        this.user = user;
     }
 }
 ```
