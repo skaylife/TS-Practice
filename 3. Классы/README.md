@@ -14,9 +14,11 @@
 
 [5. Getter и Setter ](#5)
 
-[6. Implements - имплементация (передача объекту каких то свойтв)  ](#6)
+[6. Implements - имплементация (передача объекту каких то свойтв)](#6)
 
-[7. Extends - наследование и override )  ](#7)
+[7. Extends - наследование и override](#7)
+
+[8. Extends - наследование 2 ЧАСТЬ](#8)
 
 ## 1. Создание класса <a name="1"></a> 
 
@@ -317,6 +319,33 @@ class PersistentPayment extends Payment {
         if(date) {
             this.paidAt = date;
         }
+    }
+}
+```
+
+### - ([К списку других тем](#start))
+
+## 8. Extends - наследование 2 ЧАСТЬ <a name="8"></a> 
+
+В наследуемом классе Admin, без `constructor()` и там `super();`, не будет в `console.log(this.name)` // admin. В консоле просто выйдет // user. И только после объявления конструктора и вывзова контекста `this.name` выйдет в терминале // `user` и на следующей строке `admin`. 
+
+Пример кода
+```
+// Вторая часть (2)
+class User {
+    name: string = 'user';
+
+    constructor() {
+        console.log(this.name)
+    }
+}
+
+class Admin extends User {
+    name: string = 'admin';
+
+    constructor() {
+        super();
+        console.log(this.name);
     }
 }
 ```
