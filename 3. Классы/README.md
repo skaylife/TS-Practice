@@ -26,6 +26,8 @@
 
 [11. Упражнение делаем корзину товара](#11)
 
+[12. Статические свойтсва](#12)
+
 ## 1. Создание класса <a name="1"></a> 
 
 - `constructor(name: string)` - передаем необходимые свойства класса. пр. #1
@@ -509,6 +511,39 @@ cart.DeleteProductById(1)
 cart.setDelivery(new HomeDelivery(new Date(), ''))
 console.log(cart.getSum())
 console.log(cart.checkOut())
+```
+
+### - ([К списку других тем](#start))
+
+## 12. Статические свойтсва <a name="12"></a> 
+
+Кроме обычных полей и методов класс может иметь статические. Статические поля и методы относятся не к отдельным объектам, а в целом к классу. И для обащения к статическим полям и методам применяется имя класса.
+
+Статические поля и методы определяются с помощью ключевого слова static:
+
+Пример кода: 
+```
+class UserService {
+    private static db: any;
+
+    static getUser(id: number) {
+        return UserService.db.findById(id);
+    }
+
+    create() {
+        UserService.db
+    }
+
+    static { // Инициализатор статичного класса // Неасинхронный
+        UserService.db = 'sdf';
+    }
+}
+
+// UserService.db()
+
+UserService.getUser(2)
+const inst = new UserService()
+inst.create()
 ```
 
 ### - ([К списку других тем](#start)) 
