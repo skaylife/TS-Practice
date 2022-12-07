@@ -1,6 +1,10 @@
+[Вернуться на главную страницу "TS-Practice"](https://github.com/skaylife/TS-Practice)
+
 # Классы в TypeScript
 
-### Начало 06.11.2022 г. - конец ../../.... г.
+### Начало 06.11.2022 г. - конец 07.12.2022 г.
+
+### 16 Уроков суммарно 
 
 ## Содержание и быстрое перемещение по темам <a name="start">
 
@@ -33,6 +37,8 @@
 [14. Типизация контекста this](#14)
 
 [15. Абстрактные классы](#15)
+
+[16. Абстрактные классы (упражнение)](#16)
 
 ## 1. Создание класса <a name="1"></a> 
 
@@ -658,6 +664,41 @@ const c = new UserController() // Не будет ошибки
 c.handleWithLogs('Req')
 
 // new Controller() - будет error без дублирование handle 
+```
+
+### - ([К списку других тем](#start))
+
+## 16. Абстрактные классы (упражнение) <a name="16"></a> 
+
+Необходимо реализовать абстрактный класс Logger с 2-мя методами
+абстрактным - log(message): void
+printDate - выводящий в log дату
+К нему необходимо сделать реальный класс, который бы имел метод: logWithDate,
+выводящий сначала дату, а потом заданное сообщение
+
+```
+abstract class Log {
+    abstract log(message: string): void; 
+
+    printDate(date: Date) {
+        this.log(date.toString())
+    }
+
+}
+
+class Logger extends Log {
+    log(message: string): void {
+        console.log(message)
+    }
+
+    LogWithDate(message: string) {
+        this.printDate(new Date())
+        this.log(message)
+    }
+
+}
+
+const p = new Logger().LogWithDate('Сообщение')
 ```
 
 ### - ([К списку других тем](#start)) 
