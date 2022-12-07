@@ -1,10 +1,10 @@
-[Вернуться на главную страницу "TS-Practice"](https://github.com/skaylife/TS-Practice)
-
 # Классы в TypeScript
 
 ### Начало 06.11.2022 г. - конец 07.12.2022 г.
 
 ### 16 Уроков суммарно 
+
+[Вернуться на главную страницу "TS-Practice"](https://github.com/skaylife/TS-Practice)
 
 ## Содержание и быстрое перемещение по темам <a name="start">
 
