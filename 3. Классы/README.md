@@ -28,7 +28,11 @@
 
 [12. Статические свойтсва](#12)
 
-[13. Работа с this (контекстом)](#12)
+[13. Работа с this (контекстом)](#13)
+
+[14. Типизация контекста this](#14)
+
+[15. Абстрактные классы](#15)
 
 ## 1. Создание класса <a name="1"></a> 
 
@@ -588,6 +592,72 @@ class PaymentPersistent extends Payment {
 }
 
 console.log(new PaymentPersistent().save())
+```
+
+### - ([К списку других тем](#start))
+
+## 14. Типизация контекста this<a name="14"></a> 
+
+Пример у класса `UserBuilder` с методом `setName` с типом `this`
+
+```
+class UserBuilder {
+    name: string;
+
+    setName(name: string): this {
+        this.name = name; // Присвоение контекста 
+        return this;
+    }
+
+    // TypeGuards Для проверки 
+    isAdmin(): this is AdminBuilder { // Проверка что isAdmin Это Админ Билдер
+        return this instanceof AdminBuilder;
+    }
+}
+
+class AdminBuilder  extends UserBuilder {
+    roles: string[]; // Специально сделано различие, если его не будет то в runtime не будет разницы 
+}
+
+const res = new UserBuilder().setName('Семен');
+const res2 = new AdminBuilder().setName('Семен');
+
+let user: AdminBuilder | UserBuilder = new UserBuilder()
+
+if (user.isAdmin()) {
+    console.log(user); // Типы user - AdminBuilder
+} else {
+    console.log(user); // Типы user - UserBuilder
+}
+```
+
+### - ([К списку других тем](#start))
+
+## 15. Абстрактные классы <a name="15"></a> 
+
+У абстрктных классов нельзя делать экземпляры через `new` только через наследование можно сделать экземпляр. 
+
+Пример кода: 
+```
+abstract class Controller { // Класс // Абстрактный класс нельзя инстансировать 
+    abstract handle(req: any): void; // Свойство класса
+
+    handleWithLogs(req: any): void {
+        console.log('Start');
+        this.handle(req);
+        console.log('End');
+    }
+}
+
+class UserController extends Controller { // Наследование для создание экземпляра 
+    handle(req: any): void { // В абстрактоном свойстве при наследовании, нужно дублировать абстрактное свойство
+        console.log()
+    }
+}
+const c = new UserController() // Не будет ошибки
+c.handleWithLogs('Req')
+
+// new Controller() - будет error без дублирование handle 
 ```
 
 ### - ([К списку других тем](#start)) 
