@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+
+    },
+    "include": [
+        "app*"
+    ],
+    "exclude": [
+        "app.ts"
+    ],
+    "extends": "./"
+}
