@@ -151,3 +151,18 @@
 "emitDeclarationOnly": true,
 ```
 
+### - ([К списку других тем](#start))
+
+## 3. Язык и окружение <a name="3"></a> 
+
+- target, lib
+`tsconfig.json`
+```
+"target": "ES2016" // Используемый стандарт
+"lib": [
+    "DOM",
+    "ES2016"
+]
+```
+
+### - ([К списку других тем](#start))
