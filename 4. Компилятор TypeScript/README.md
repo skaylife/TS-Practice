@@ -16,7 +16,7 @@
 
 [4. Перегрузка сигнатуры ](#4)
 
-[5. Getter и Setter ](#5)
+[5. Strict режимы ](#5)
 
 [6. Implements - имплементация (передача объекту каких то свойтв)](#6)
 
@@ -183,3 +183,24 @@
 ```
 
 ### - ([К списку других тем](#start))
+
+## 5. Strict Режимы <a name="5"></a>
+
+Использвоать по макисимум `Strict` режим
+
+Файл `tsconfig.json`
+
+```
+    "strict": true,                                      /* Enable all strict type-checking options. */
+    // "noImplicitAny": true,                            /* Enable error reporting for expressions and declarations with an implied 'any' type. */
+    // "strictNullChecks": true,                         /* When type checking, take into account 'null' and 'undefined'. */
+    // "strictFunctionTypes": true,                      /* When assigning functions, check to ensure parameters and the return values are subtype-compatible. */
+    // "strictBindCallApply": true,                      /* Check that the arguments for 'bind', 'call', and 'apply' methods match the original function. */
+    // "strictPropertyInitialization": true,             /* Check for class properties that are declared but not set in the constructor. */
+    // "noImplicitThis": true,                           /* Enable error reporting when 'this' is given the type 'any'. */
+    // "useUnknownInCatchVariables": true,               /* Default catch clause variables as 'unknown' instead of 'any'. */
+    // "alwaysStrict": true,     
+```
+
+### - ([К списку других тем](#start))
+
