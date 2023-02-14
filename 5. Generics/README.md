@@ -10,7 +10,7 @@
 
 [1. Пример встроенных Generics ](#1)
 
-[2. Выводы компиляции ](#2)
+[2. Написание функции Generics ](#2)
 
 [3. Методы классов ](#3)
 
@@ -40,131 +40,25 @@ const check: Record<string, boolean> = {
 
 ```
 
-### Редактирование файла `tsconfig.json`
-
-#### Включение областей 
-
-Скомпелируются все файла кроме в `"files"` - а это `"app.ts"`
-Файл - `tsconfig.json`
-```
-{
-    "compilerOptions": {
-
-    },
-    "files": {
-        "app.ts"
-    }
-}
-```
-Включение по определенному патерну
-```
-{
-    "include": [
-        "app*"
-    ]
-}
-```
-Любая папка 
-```
-    "include": [
-        "/**/app*"
-    ]
-```
-Конкретная папка `folder`
-```
-    "include": [
-        "/folder/app*"
-    ]
-```
-#### Исключение областей
-
-`exclude` - исключает те файлы который там указаны.
-В данном случае все файлы скомпелируются `app2.ts`, `app3.ts`, но `app.ts` не скомпелируется.
-```
-{
-    "compilerOptions": {
-
-    },
-    "include": [
-        "app*"
-    ],
-    "exclude": [
-        "app.ts"
-    ],
-}
-```
-
-#### Наследование от других `tsconfig.json`
-
-`"extends": "./"`
-```
-{
-    "compilerOptions": {
-
-    },
-    "include": [
-        "app*"
-    ],
-    "exclude": [
-        "app.ts"
-    ],
-    "extends": "./"
-}
-```
-
-#### Дополнительные опции - Если проект на `js` с `ts`
-
-в `tsconfig.json` есть 
-
-`allowJs: true`
-`checkJs: true`
-
-поумолчанию они выключены
-
 ### - ([К списку других тем](#start))
-## 2. Выводы компиляции <a name="2"></a> 
+## 2. Написание функции Generics <a name="2"></a> 
 
+Пример кода
+```
+function logMiddleware<T>(data: T): T  { // Можно предеать данные любого типа
+    console.log(data);
+    return data;
+}
 
-- Все файлы которые будут билдиться - будут поммещаться в папку `build`
-`tsconfig.json`
-```
-"outDir": "./build/"
-```
+const res = logMiddleware<number>(10); // Res задаем определенный тип типа <number>
 
-- Отключение комментариев при компиляции 
-`tsconfig.json`
-```
-"removeComments": true,
-```
+function getSplitHalf<T>(data: Array<T>): Array<T> { // Нужно строго задать Array, так как length есть именно там
+    const l = data.length / 2;
+    return data.splice(0, l);
+}
 
-- Отключение компиляции при ошибке
-`tsconfig.json`
+getSplitHalf<number>([1, 3, 4]);
 ```
-"noEmitOnError": true,
-```
-
-- Создает связь между `JS` файлом и исходником `ts`
-
-
-`tsconfig.json`
-```
-"sourceMap": true,
-"inlineSourceMap": true, // Создает закоментированную строку в base64 (Что увеличивает объем файла)
-"inlineSources": true, // Создает закоментированную строку в base64 (Что увеличивает объем файла)
-```
-
-- Создание файла с декларацией для авто комплита и что использовалось в `ts` файл с раширением `name.d.ts`
-`tsconfig.json`
-```
-"declaration": true,
-```
-
-- Билд только с декларациями 
-`tsconfig.json`
-```
-"emitDeclarationOnly": true,
-```
-
 ### - ([К списку других тем](#start))
 
 ## 3. Язык и окружение <a name="3"></a> 
