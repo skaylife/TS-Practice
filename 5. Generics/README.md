@@ -16,7 +16,7 @@
 
 [4. Использование в типах ](#4)
 
-[5. Strict режимы ](#5)
+[5. Ограничения Generic ](#5)
 
 [6. Проверки кода)](#6)
 
@@ -135,22 +135,35 @@ const logLine: ILogLine<{a: number}> = {
 
 ### - ([К списку других тем](#start))
 
-## 5. Strict Режимы <a name="5"></a>
+## 5. Ограничения Generic <a name="5"></a>
 
 Использвоать по макисимум `Strict` режим
 
-Файл `tsconfig.json`
+Ограничения Generic и области видимости
 
 ```
-    "strict": true,                                      /* Enable all strict type-checking options. */
-    // "noImplicitAny": true,                            /* Enable error reporting for expressions and declarations with an implied 'any' type. */
-    // "strictNullChecks": true,                         /* When type checking, take into account 'null' and 'undefined'. */
-    // "strictFunctionTypes": true,                      /* When assigning functions, check to ensure parameters and the return values are subtype-compatible. */
-    // "strictBindCallApply": true,                      /* Check that the arguments for 'bind', 'call', and 'apply' methods match the original function. */
-    // "strictPropertyInitialization": true,             /* Check for class properties that are declared but not set in the constructor. */
-    // "noImplicitThis": true,                           /* Enable error reporting when 'this' is given the type 'any'. */
-    // "useUnknownInCatchVariables": true,               /* Default catch clause variables as 'unknown' instead of 'any'. */
-    // "alwaysStrict": true,     
+class Vehile {
+    run!: number;
+}
+
+function kmToMiles<T extends Vehile>(vehicle: T): T {
+    vehicle.run = vehicle.run / 0.72;
+    return vehicle;
+}
+
+class LCV extends Vehile {
+    capacity!: number;
+}
+
+const vehicle = kmToMiles(new Vehile());
+const lcv = kmToMiles(new LCV());
+kmToMiles({run: 1});
+
+function logId<T extends string | number, Y>(id: T, additionalData: Y): {id: T, data: Y} {
+    console.log(id);
+    console.log(additionalData);
+    return {id, data: additionalData};
+}   
 ```
 
 ### - ([К списку других тем](#start))
