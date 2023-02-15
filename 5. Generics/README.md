@@ -18,7 +18,7 @@
 
 [5. Ограничения Generic ](#5)
 
-[6. Проверки кода)](#6)
+[6. Упр. Функция сортировки](#6)
 
 
 ## 1. Пример встроенных Generics <a name="1"></a> 
@@ -168,22 +168,50 @@ function logId<T extends string | number, Y>(id: T, additionalData: Y): {id: T, 
 
 ### - ([К списку других тем](#start))
 
-## 6. Проверки кода <a name="6"></a>
+## 6. Упр. Функция сортировки <a name="6"></a>
 
-`tsconfig.json` 
+Пример сортировки
 
 ```
-    // "noImplicitReturns": true,                        /* Enable error reporting for codepaths that do not explicitly return in a function. */
-    // "noFallthroughCasesInSwitch": true,               /* Enable error reporting for fallthrough cases in switch statements. */
-    // "noUncheckedIndexedAccess": true,                 /* Add 'undefined' to a type when accessed using an index. */
-    // "noImplicitOverride": true,                       /* Ensure overriding members in derived classes are marked with an override modifier. */
-    // "noPropertyAccessFromIndexSignature": true,       /* Enforces using indexed accessors for keys declared using an indexed type. */
-    // "allowUnusedLabels": true,                        /* Disable error reporting for unused labels. */
-    // "allowUnreachableCode": true,                     /* Disable error reporting for unreachable code. */
+const data = [
+    {id: 1, name: 'Вася'},
+    {id: 2, name: 'Петя'},
+    {id: 3, name: 'Надя'},
+];
 
-    /* Completeness */
-    // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
-    "skipLibCheck": true     
+interface ID {
+    id: number;
+
+}
+
+function sort<T extends ID>(data: T[], type: 'asc' | 'desc' = 'asc'):T[] {
+    return data.sort((a, b) => {
+        switch (type) {
+            case 'asc':
+                return a.id - b.id;
+            case 'desc':
+                return b.id - a.id;
+        }
+    })
+}
+
+console.log(sort(data,'desc'))
+console.log(sort(data))  
+```
+
+Результат сортировки 
+
+```
+[
+  { id: 3, name: 'Надя' },
+  { id: 2, name: 'Петя' },
+  { id: 1, name: 'Вася' }
+]
+[
+  { id: 1, name: 'Вася' },
+  { id: 2, name: 'Петя' },
+  { id: 3, name: 'Надя' }
+]
 ```
 
 ### - ([К списку других тем](#start))
