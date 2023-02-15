@@ -12,7 +12,7 @@
 
 [2. Написание функции Generics ](#2)
 
-[3. Методы классов ](#3)
+[3. Упр. Преобразование функции в строку ](#3)
 
 [4. Перегрузка сигнатуры ](#4)
 
@@ -61,16 +61,35 @@ getSplitHalf<number>([1, 3, 4]);
 ```
 ### - ([К списку других тем](#start))
 
-## 3. Язык и окружение <a name="3"></a> 
+## 3. Упр. Преобразование функции в строку <a name="3"></a> 
 
-- target, lib
-`tsconfig.json`
+`Задача` - необходимо написать функцию toString, которая принимает любой тип и возвращает его строковое представление. Если не может, то возвращает undefined.
+
 ```
-"target": "ES2016" // Используемый стандарт
-"lib": [
-    "DOM",
-    "ES2016"
-]
+function toString<T>(data: T): string | undefined {
+    if(Array.isArray(data)) {
+        return data.toString();
+    }
+    switch (typeof data) {
+        case 'string':
+            return data;
+        case 'number':
+        case 'symbol':
+        case 'bigint':
+        case 'boolean':
+        case 'function':
+            return data.toString();
+        case 'object':
+            return JSON.stringify(data);
+        default:
+            return undefined;
+    }
+}
+
+console.log(toString(3));
+console.log(toString(true));
+console.log(toString(['a', 'b']));
+console.log(toString({a: 1}));
 ```
 
 ### - ([К списку других тем](#start))
