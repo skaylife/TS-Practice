@@ -14,7 +14,7 @@
 
 [3. Упр. Преобразование функции в строку ](#3)
 
-[4. Перегрузка сигнатуры ](#4)
+[4. Использование в типах ](#4)
 
 [5. Strict режимы ](#5)
 
@@ -94,19 +94,43 @@ console.log(toString({a: 1}));
 
 ### - ([К списку других тем](#start))
 
-## 4. Модули <a name="4"></a> 
+## 4. Использование в типах <a name="4"></a> 
 
+Использование типов интерфесов с `Generics`
 
-`tsconfig.json`
 ```
-"module": "commonjs" // Используемый стандарт
-"rootDir": "./src" // Путь в котром будет происходить компиляция проекта
-
-"path": {
-    "@lib": ["./lib/my-lib] // Можно здать алиас и потом в проекте его ипортить import from @lib....
+function logMiddleware<T>(data: T): T {
+    console.log(data);
+    return data;
 }
 
-"resolveJsonModule": true, // Можно работать с JSon как с файлами JS
+const res = logMiddleware<number>(10);
+
+function getSplitedHalf<T>(data: Array<T>): Array<T> {
+    const l = data.length / 2
+    return data.splice(0, l);
+}
+
+getSplitedHalf<number>([1, 3, 4]);
+
+const split: <T>(data: Array<T>) => Array<T> = getSplitedHalf;
+
+interface ILogLine<T> {
+    timeStamp: Date;
+    data: T
+}
+
+type LogLineType<T> = {
+    timeStamp: Date;
+    data: T
+}
+
+const logLine: ILogLine<{a: number}> = {
+    timeStamp: new Date(),
+    data: {
+        a: 1
+    }
+}
 ```
 
 ### - ([К списку других тем](#start))
