@@ -20,6 +20,8 @@
 
 [6. Упр. Функция сортировки](#6)
 
+[7. Generics классы](#7)
+
 
 ## 1. Пример встроенных Generics <a name="1"></a> 
 
@@ -212,6 +214,42 @@ console.log(sort(data))
   { id: 2, name: 'Петя' },
   { id: 3, name: 'Надя' }
 ]
+```
+
+### - ([К списку других тем](#start))
+
+## 7. Generics и классы <a name="7"></a>
+
+Пример кода: 
+```
+class Resp<D, E> {
+    data?: D;
+    error?: E;
+
+    constructor(data?: D, error?: E) {
+        if(data) {
+           this.data = data;
+        }
+        if(error) {
+            this.error = error;
+        }
+        
+    }
+}
+
+const res = new Resp('data');
+
+class HTTPResp<F> extends Resp<string, number> {
+    // code: number | undefined;
+    code!: F;
+
+    setCode(code: F) {
+        this.code = code;
+    }
+}
+
+const res2 = new HTTPResp()
+
 ```
 
 ### - ([К списку других тем](#start))
