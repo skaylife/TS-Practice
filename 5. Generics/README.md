@@ -1,6 +1,6 @@
 # Generics в TypeScript
 
-### Начало 14.02.2023 г. - конец //.//.//// г.
+### Начало 14.02.2023 г. - конец 44.02.2023 г. 
 
 ### *<number> Уроков суммарно 
 
@@ -21,6 +21,8 @@
 [6. Упр. Функция сортировки](#6)
 
 [7. Generics классы](#7)
+
+[8. Mixins ](#8)
 
 
 ## 1. Пример встроенных Generics <a name="1"></a> 
@@ -250,6 +252,57 @@ class HTTPResp<F> extends Resp<string, number> {
 
 const res2 = new HTTPResp()
 
+```
+
+### - ([К списку других тем](#start))
+
+## 8. Mixins <a name="8"></a>
+
+- Mixins - дает возможность писать еще одну реализацию `extend`а и примиксовать еще какое то свойство к нашему классу.
+
+- Микскины позволяют экстендить сразу несколько классов в один. 
+
+- Если есть задача конструировать что то большое из разных маленьких свойств, то это можно легко сделать с помощью миксионов
+
+```
+type Constructor = new (...args: any[]) => {}
+type GConstructor<T = {}> = new (...args: any []) => T
+
+class List {
+    constructor(public items: string[]) {}
+}
+
+class Accordion {
+    isOpened: boolean | undefined;
+}
+
+type ListType = GConstructor<List>;
+type AccordionType = GConstructor<Accordion>
+
+class ExtendedListClass extends List {
+    first() {
+        return this.items[0];
+    }
+}
+
+//Mixins
+
+function ExtendedList<TBase extends ListType & AccordionType>(Base: TBase) {
+    return class ExtendedList extends Base {
+        first() {
+            return this.items[0];
+        }
+    }
+}
+
+class AccordionList {
+    isOpened: boolean | undefined;
+    constructor(public items: string[]) {}
+}
+
+const list = ExtendedList(AccordionList);
+const res = new list(['firs', 'second']);
+console.log(res.first()) 
 ```
 
 ### - ([К списку других тем](#start))
