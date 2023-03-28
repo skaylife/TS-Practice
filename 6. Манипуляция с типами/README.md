@@ -10,9 +10,9 @@
 
 [1. Пример использования KeyOf ](#1)
 
-[2. Написание функции Generics ](#2)
+[2. Упр Пишем функцию групировки ](#2)
 
-[3. Упр. Преобразование функции в строку ](#3)
+[3. TypeOf ](#3)
 
 [4. Использование в типах ](#4)
 
@@ -52,55 +52,98 @@ const userName = getValue(user, 'name')  // Если использовать na
 ```
 
 ### - ([К списку других тем](#start))
-## 2. Написание функции Generics <a name="2"></a> 
+## 2. Упр Пишем функцию групировки <a name="2"></a> 
+
+Необходимо написать функцию группировки, которая принимает массив объектов
+и его ключ, производит группировку по указанному ключу и возращает
+сгруппированный объект.
+Пример:
+``` js
+[
+	{ group: 1, name: 'a' },
+	{ group: 1, name: 'b' },
+	{ group: 2, name: 'c' },
+];
+```
+
+При группироке по 'group' ---->
+
+``` js
+{
+	'1': [ { group: 1, name: 'a' }, { group: 1, name: 'b' } ],
+	'2': [ { group: 2, name: 'c' } ]
+}
+```
 
 Пример кода
 ```
-function logMiddleware<T>(data: T): T  { // Можно предеать данные любого типа
-    console.log(data);
-    return data;
+interface Data {
+    group: number;
+    name: string;
 }
 
-const res = logMiddleware<number>(10); // Res задаем определенный тип типа <number>
+const data: Data[] = [
+    {group: 1, name: 'a'},
+    {group: 1, name: 'b'},
+    {group: 3, name: 'c'},
+]
 
-function getSplitHalf<T>(data: Array<T>): Array<T> { // Нужно строго задать Array, так как length есть именно там
-    const l = data.length / 2;
-    return data.splice(0, l);
+interface IGroup<T> {
+    [key: string]: T[]; 
 }
 
-getSplitHalf<number>([1, 3, 4]);
+type key = string | number | symbol;
+
+function group<T extends Record<string, any>>(array: T[], key: keyof T): IGroup<T> {
+    return array.reduce<IGroup<T>>((map: IGroup<T>, item) => {
+        const itemKey = item[key];
+        let curEl = map[itemKey]
+        if (Array.isArray(curEl)) {
+            curEl.push(item);
+        } else {
+            curEl = [item];
+        }
+        map[itemKey] = curEl;
+        return map;
+    }, {})
+}
+
+const res = group<Data>(data, 'group')
+console.log(res)
 ```
 ### - ([К списку других тем](#start))
 
-## 3. Упр. Преобразование функции в строку <a name="3"></a> 
-
-`Задача` - необходимо написать функцию toString, которая принимает любой тип и возвращает его строковое представление. Если не может, то возвращает undefined.
+## 3. TypeOf <a name="3"></a> 
 
 ```
-function toString<T>(data: T): string | undefined {
-    if(Array.isArray(data)) {
-        return data.toString();
-    }
-    switch (typeof data) {
-        case 'string':
-            return data;
-        case 'number':
-        case 'symbol':
-        case 'bigint':
-        case 'boolean':
-        case 'function':
-            return data.toString();
-        case 'object':
-            return JSON.stringify(data);
-        default:
-            return undefined;
-    }
+let strOrNum: string | number = 5; // TypeScript это сделает явно number
+
+if (Math.random() > 0.5) {
+    strOrNum = 8;
+} else {
+    strOrNum = 'str'
 }
 
-console.log(toString(3));
-console.log(toString(true));
-console.log(toString(['a', 'b']));
-console.log(toString({a: 1}));
+if (typeof strOrNum === 'string') {
+    console.log(strOrNum);
+} else {
+    console.log(strOrNum)
+}
+
+let str2OrNum: typeof strOrNum;
+
+const user = {
+    name: 'Вася'
+};
+
+type keyOfUser = keyof typeof user;
+
+enum Direction {
+    Up,
+    Down
+}
+
+type d = keyof typeof Direction;
 ```
 
 ### - ([К списку других тем](#start))
