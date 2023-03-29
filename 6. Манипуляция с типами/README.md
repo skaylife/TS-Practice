@@ -14,7 +14,7 @@
 
 [3. TypeOf ](#3)
 
-[4. Использование в типах ](#4)
+[4. Indexed Access Types ](#4)
 
 [5. Ограничения Generic ](#5)
 
@@ -146,45 +146,47 @@ enum Direction {
 type d = keyof typeof Direction;
 ```
 
+
 ### - ([К списку других тем](#start))
 
-## 4. Использование в типах <a name="4"></a> 
-
-Использование типов интерфесов с `Generics`
+## 4. Indexed Access Types <a name="4"></a> 
 
 ```
-function logMiddleware<T>(data: T): T {
-    console.log(data);
-    return data;
+interface Role {
+    name: string;
 }
 
-const res = logMiddleware<number>(10);
-
-function getSplitedHalf<T>(data: Array<T>): Array<T> {
-    const l = data.length / 2
-    return data.splice(0, l);
+interface Permission {
+    endDate: Date;
 }
 
-getSplitedHalf<number>([1, 3, 4]);
-
-const split: <T>(data: Array<T>) => Array<T> = getSplitedHalf;
-
-interface ILogLine<T> {
-    timeStamp: Date;
-    data: T
+interface User {
+    name: string;
+    roles: Role[];
+    permission: Permission
 }
 
-type LogLineType<T> = {
-    timeStamp: Date;
-    data: T
-}
-
-const logLine: ILogLine<{a: number}> = {
-    timeStamp: new Date(),
-    data: {
-        a: 1
+const user: User = {
+    name: ' Вася',
+    roles: [],
+    permission: {
+        endDate: new Date()
     }
 }
+
+const nameUser = user['name'];
+const roleNames = 'roles'
+let roleNames2: 'roles' = 'roles'
+
+type rolesType = User['roles'];
+type rolesType2 = User[typeof roleNames];
+type rolesType3 = User[typeof roleNames2];
+
+type roleType = User['roles'][number];
+type dateType = User['permission']['endDate'];
+
+const roles = ['admin', 'user', 'super-user'] as const;
+type roleTypes = typeof roles[number]
 ```
 
 ### - ([К списку других тем](#start))
