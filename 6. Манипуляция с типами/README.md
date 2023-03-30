@@ -193,6 +193,7 @@ type roleTypes = typeof roles[number]
 
 ## 5. Conditional Types <a name="5"></a>
 
+
 ```
 const a1: number = Math.random() > 0.5 ? 1 : 0; // Работа с JS
 
