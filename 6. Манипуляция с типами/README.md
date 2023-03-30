@@ -16,7 +16,7 @@
 
 [4. Indexed Access Types ](#4)
 
-[5. Ограничения Generic ](#5)
+[5. Conditional Types ](#5)
 
 [6. Упр. Функция сортировки](#6)
 
@@ -191,35 +191,56 @@ type roleTypes = typeof roles[number]
 
 ### - ([К списку других тем](#start))
 
-## 5. Ограничения Generic <a name="5"></a>
-
-Использвоать по макисимум `Strict` режим
-
-Ограничения Generic и области видимости
+## 5. Conditional Types <a name="5"></a>
 
 ```
-class Vehile {
-    run!: number;
+const a1: number = Math.random() > 0.5 ? 1 : 0; // Работа с JS
+
+// Работа с типами
+interface HTTPResponse<T extends 'success' | 'failed'> {
+    code: number;
+    data: T extends 'success' ? string : Error;
 }
 
-function kmToMiles<T extends Vehile>(vehicle: T): T {
-    vehicle.run = vehicle.run / 0.72;
-    return vehicle;
+const suc: HTTPResponse<'success'> = {
+    code: 200,
+    data: 'done'
 }
 
-class LCV extends Vehile {
-    capacity!: number;
+const err: HTTPResponse<'failed'> = {
+    code: 200,
+    data: new Error()
 }
 
-const vehicle = kmToMiles(new Vehile());
-const lcv = kmToMiles(new LCV());
-kmToMiles({run: 1});
+class User {
+    id!: number;
+    name!: string;
+}
 
-function logId<T extends string | number, Y>(id: T, additionalData: Y): {id: T, data: Y} {
-    console.log(id);
-    console.log(additionalData);
-    return {id, data: additionalData};
-}   
+class UserPersistend extends User {
+    dbId!: string;
+}
+
+function getUser(dbIdOrId: string | number): User | UserPersistend {
+    if (typeof dbIdOrId === 'number') {
+        return new User();
+    } else {
+        return new UserPersistend();
+    }
+}
+
+type UserOrPersistend<T extends string | number> = T extends number ? User : UserPersistend;
+
+function getUser2<T extends string | number>(id: T): UserOrPersistend<T>{
+    if (typeof id === 'number') {
+        return new User() as UserOrPersistend<T>;
+    } else {
+        return new UserPersistend();
+    }
+}
+
+const res = getUser2(1)
+const res2 = getUser2('asdsdf')
 ```
 
 ### - ([К списку других тем](#start))
