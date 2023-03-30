@@ -18,7 +18,7 @@
 
 [5. Conditional Types ](#5)
 
-[6. Упр. Функция сортировки](#6)
+[6. Infer](#6)
 
 [7. Generics классы](#7)
 
@@ -245,50 +245,22 @@ const res2 = getUser2('asdsdf')
 
 ### - ([К списку других тем](#start))
 
-## 6. Упр. Функция сортировки <a name="6"></a>
-
-Пример сортировки
+## 6. Infer <a name="6"></a>
 
 ```
-const data = [
-    {id: 1, name: 'Вася'},
-    {id: 2, name: 'Петя'},
-    {id: 3, name: 'Надя'},
-];
-
-interface ID {
-    id: number;
-
+function runTransaction (transaction: {
+    fromTo: [string, string]
+}) {
+    console.log(transaction)
 }
 
-function sort<T extends ID>(data: T[], type: 'asc' | 'desc' = 'asc'):T[] {
-    return data.sort((a, b) => {
-        switch (type) {
-            case 'asc':
-                return a.id - b.id;
-            case 'desc':
-                return b.id - a.id;
-        }
-    })
+const transaction: GetFirstArg<typeof runTransaction> = {
+    fromTo: ['1', '2'] as [string, string]
 }
 
-console.log(sort(data,'desc'))
-console.log(sort(data))  
-```
+runTransaction(transaction);
 
-Результат сортировки 
-
-```
-[
-  { id: 3, name: 'Надя' },
-  { id: 2, name: 'Петя' },
-  { id: 1, name: 'Вася' }
-]
-[
-  { id: 1, name: 'Вася' },
-  { id: 2, name: 'Петя' },
-  { id: 3, name: 'Надя' }
-]
+type GetFirstArg<T> = T extends (first: infer First, ...args: any[]) => any ? First : never  
 ```
 
 ### - ([К списку других тем](#start))
