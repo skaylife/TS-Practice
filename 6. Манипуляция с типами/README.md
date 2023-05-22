@@ -27,7 +27,6 @@
 [9. Template Literal Types ](#9)
 
 
-
 ## 1. Пример использования KeyOf <a name="1"></a> 
 
 
