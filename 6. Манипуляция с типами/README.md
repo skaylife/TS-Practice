@@ -18,11 +18,11 @@
 
 [5. Conditional Types ](#5)
 
-[6. Infer](#6)
+[6. Infer ](#6)
 
-[7. Generics классы](#7)
+[7. Mapped Types ](#7)
 
-[8. Mixins ](#8)
+[8. Упражнение - Валидация форм ](#8)
 
 
 ## 1. Пример использования KeyOf <a name="1"></a> 
@@ -294,53 +294,34 @@ type UserAccess1 = {
 
 ### - ([К списку других тем](#start))
 
-## 8. Mixins <a name="8"></a>
+## 8. Упражнение - Валидация форм <a name="8"></a>
 
-- Mixins - дает возможность писать еще одну реализацию `extend`а и примиксовать еще какое то свойство к нашему классу.
-
-- Микскины позволяют экстендить сразу несколько классов в один. 
-
-- Если есть задача конструировать что то большое из разных маленьких свойств, то это можно легко сделать с помощью миксионов
-
+Пример кода:
 ```
-type Constructor = new (...args: any[]) => {}
-type GConstructor<T = {}> = new (...args: any []) => T
-
-class List {
-    constructor(public items: string[]) {}
+//Тип валидации
+interface IForm {
+    name: string;
+    password: string;
 }
-
-class Accordion {
-    isOpened: boolean | undefined;
+// Данные для валидации
+const form: IForm = {
+    name: 'Вася',
+    password: '123'
 }
-
-type ListType = GConstructor<List>;
-type AccordionType = GConstructor<Accordion>
-
-class ExtendedListClass extends List {
-    first() {
-        return this.items[0];
+//Этап валидации
+const formValidation: Validation<IForm> = {
+    name: {isValid: true},
+    password: {isValid: false, errorMessage: 'Пароль должен быть не меньше 5 символов'}
+}
+// Принцип валидации 
+type  Validation<T> = {
+    [K in keyof T]: {
+        isValid: true
+    } | {
+        isValid: false;
+        errorMessage: string;
     }
 }
-
-//Mixins
-
-function ExtendedList<TBase extends ListType & AccordionType>(Base: TBase) {
-    return class ExtendedList extends Base {
-        first() {
-            return this.items[0];
-        }
-    }
-}
-
-class AccordionList {
-    isOpened: boolean | undefined;
-    constructor(public items: string[]) {}
-}
-
-const list = ExtendedList(AccordionList);
-const res = new list(['firs', 'second']);
-console.log(res.first()) 
 ```
 
 ### - ([К списку других тем](#start))
