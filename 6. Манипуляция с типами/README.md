@@ -266,37 +266,29 @@ type GetFirstArg<T> = T extends (first: infer First, ...args: any[]) => any ? Fi
 
 ### - ([К списку других тем](#start))
 
-## 7. Generics и классы <a name="7"></a>
+## 7. Mapped Types <a name="7"></a>
 
 Пример кода: 
 ```
-class Resp<D, E> {
-    data?: D;
-    error?: E;
+type Modifier = 'read' | 'update' | 'create';
 
-    constructor(data?: D, error?: E) {
-        if(data) {
-           this.data = data;
-        }
-        if(error) {
-            this.error = error;
-        }
-        
-    }
+type UserRoles = {
+    customers: Modifier,
+    projects?: Modifier,
+    adminPanel?: Modifier,
 }
 
-const res = new Resp('data');
-
-class HTTPResp<F> extends Resp<string, number> {
-    // code: number | undefined;
-    code!: F;
-
-    setCode(code: F) {
-        this.code = code;
-    }
+type ModifierToAccess<Type> = {
+    +readonly [Property in keyof Type as Exclude<`canAccess${string & Property}`, 'canAccessadminPanel'>]-?: boolean;
 }
 
-const res2 = new HTTPResp()
+type UserAccess2 = ModifierToAccess<UserRoles>
+
+type UserAccess1 = {
+    customers: boolean,
+    projects?: boolean,
+    adminPanel?: boolean,
+}
 
 ```
 
