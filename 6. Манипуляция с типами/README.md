@@ -1,8 +1,8 @@
-# Generics в TypeScript
+# Манипуляция с типами в TypeScript
 
-### Начало 10.03.2023 г. - конец **.**.**** г. 
+### Начало 10.03.2023 г. - конец 22.05.2022 г. 
 
-### *<number> Уроков суммарно 
+### 9 Уроков суммарно 
 
 [Вернуться на главную страницу "TS-Practice"](https://github.com/skaylife/TS-Practice)
 
@@ -23,6 +23,9 @@
 [7. Mapped Types ](#7)
 
 [8. Упражнение - Валидация форм ](#8)
+
+[9. Template Literal Types ](#9)
+
 
 
 ## 1. Пример использования KeyOf <a name="1"></a> 
@@ -324,5 +327,31 @@ type  Validation<T> = {
 }
 ```
 
+### - ([К списку других тем](#start))
+
+## 9. Template Literal Types <a name="8"></a>
+Код из примера:
+
+```
+type ReadOrWrite = 'read' | 'write'
+type Bulk = 'bulk' | ''
+
+// Получились union type 
+type Access = `can${Capitalize<ReadOrWrite>}${Capitalize<Bulk>}`
+// Infer вытаскивает для следующего использования
+type ReadOrWriteBulk<T> = T extends `can${infer R}` ? R : never;
+
+type T = ReadOrWriteBulk<Access>
+
+type ErrorOrSuccess = 'error' | 'success';
+
+type ResponseT = {
+    result: `http${Capitalize<ErrorOrSuccess>}`
+}
+
+const a2: ResponseT = {
+    result: 'httpSuccess'
+}
+```
 ### - ([К списку других тем](#start))
 
