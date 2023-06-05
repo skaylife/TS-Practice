@@ -2,7 +2,7 @@
 
 ### Начало 05.06.2023 г. - конец 05.06.2023 г. 
 
-### 4 Уроков суммарно 
+### 4 Уроков суммарно
 
 [Вернуться на главную страницу "TS-Practice"](https://github.com/skaylife/TS-Practice)
 
@@ -18,7 +18,7 @@
 
 ## 1. Partial, Required, Readonly <a name="1"></a> 
 
-Partial, Required, Readonly
+Partial, Required, Readonly 
 
 ```
 interface User {
