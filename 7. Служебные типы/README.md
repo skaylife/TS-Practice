@@ -10,7 +10,7 @@
 
 [1. Partial, Required, Readonly ](#1)
 
-[2. Упр Пишем функцию групировки ](#2)
+[2. Pick, Omit, Extract, Exclude ](#2)
 
 [3. TypeOf ](#3)
 
@@ -47,98 +47,60 @@ type requiredAndReadonly = Required<Readonly<User>> // Все поля обяз�
 ```
 
 ### - ([К списку других тем](#start))
-## 2. Упр Пишем функцию групировки <a name="2"></a> 
+## 2. Pick, Omit, Extract, Exclude <a name="2"></a> 
 
-Необходимо написать функцию группировки, которая принимает массив объектов
-и его ключ, производит группировку по указанному ключу и возращает
-сгруппированный объект.
-Пример:
-``` js
-[
-	{ group: 1, name: 'a' },
-	{ group: 1, name: 'b' },
-	{ group: 2, name: 'c' },
-];
-```
-
-При группироке по 'group' ---->
-
-``` js
-{
-	'1': [ { group: 1, name: 'a' }, { group: 1, name: 'b' } ],
-	'2': [ { group: 2, name: 'c' } ]
-}
-```
-
-Пример кода
-```
-interface Data {
-    group: number;
-    name: string;
+ ```
+interface PaymentPersistence {
+    id: number;
+    sum: number;
+    from: string;
+    to: string;
 }
 
-const data: Data[] = [
-    {group: 1, name: 'a'},
-    {group: 1, name: 'b'},
-    {group: 3, name: 'c'},
-]
+// Исключение id bp type Payment
+type Payment = Omit<PaymentPersistence, "id">
+// Вывод
+// type Payment {
+//     sum: number;
+//     from: string;
+//     to: string;
+// }
 
-interface IGroup<T> {
-    [key: string]: T[]; 
-}
+// Pick взять только from и to
+type PaymentRequisits = Pick<PaymentPersistence, "from" | "to"> 
+// type PaymentPersistence {
+//     from: string;
+//     to: string;
+// }
 
-type key = string | number | symbol;
+type ExtractEx = Extract<'from' | 'to' | Payment, string>; // Взять только from , to
+type ExcludeEx = Exclude<'from' | 'to' | Payment, string>; // Наобарот будут все
+ ```
 
-function group<T extends Record<string, any>>(array: T[], key: keyof T): IGroup<T> {
-    return array.reduce<IGroup<T>>((map: IGroup<T>, item) => {
-        const itemKey = item[key];
-        let curEl = map[itemKey]
-        if (Array.isArray(curEl)) {
-            curEl.push(item);
-        } else {
-            curEl = [item];
-        }
-        map[itemKey] = curEl;
-        return map;
-    }, {})
-}
-
-const res = group<Data>(data, 'group')
-console.log(res)
-```
 ### - ([К списку других тем](#start))
 
-## 3. TypeOf <a name="3"></a> 
+## 3. ReturnType, Parameters, ConstructorParameters <a name="3"></a> 
 
 ```
-let strOrNum: string | number = 5; // TypeScript это сделает явно number
-
-if (Math.random() > 0.5) {
-    strOrNum = 8;
-} else {
-    strOrNum = 'str'
+class User {
+    constructor(public id: number, public name: string) {}
 }
 
-if (typeof strOrNum === 'string') {
-    console.log(strOrNum);
-} else {
-    console.log(strOrNum)
+function getData(id: number): User {
+    return new User(id, "Вася")
 }
 
-let str2OrNum: typeof strOrNum;
+type RT = ReturnType<typeof getData> //RT = User
+type RT2 = ReturnType<() => void> //RT = Void
+type RT3 = ReturnType<<T>() => T> //RT = Unknown
+type RT4 = ReturnType<<T extends string>() => T> //RT = string
 
-const user = {
-    name: 'Вася'
-};
+type PT = Parameters<typeof getData> // PT = [id : number]
+type PTnum = Parameters<typeof getData>[0] // Короткая запись, чтоб получить number
 
-type keyOfUser = keyof typeof user;
+type first = PT[0] // Альтернативный вариант
 
-enum Direction {
-    Up,
-    Down
-}
-
-type d = keyof typeof Direction;
+type CP = ConstructorParameters<typeof User>
 ```
 
 
