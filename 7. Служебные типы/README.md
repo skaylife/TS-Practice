@@ -100,7 +100,8 @@ type PTnum = Parameters<typeof getData>[0] // Короткая запись, ч�
 
 type first = PT[0] // Альтернативный вариант
 
-type CP = ConstructorParameters<typeof User>
+type CP = ConstructorParameters<typeof User>; // CP = [id: number, name: string]
+type IT = InstanceType<typeof User>; // IT = User instance
 ```
 
 
