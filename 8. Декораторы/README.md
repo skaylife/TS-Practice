@@ -12,7 +12,7 @@
 
 [2. Декоратор класса ](#2)
 
-[3. ReturnType, Parameters, ConstructorParameters ](#3)
+[3. Фабрика декораторов ](#3)
 
 [4. Awaited ](#4)
 
@@ -87,29 +87,63 @@ console.log(new UserService().getUserInDatabase()); // 1000
 
 ### - ([К списку других тем](#start))
 
-## 3. ReturnType, Parameters, ConstructorParameters <a name="3"></a> 
+## 3. Фабрика декораторов <a name="3"></a> 
+
+Инициализация происходит в порядке в котором они написаны, а исполняются уже в обратном порядке
 
 ```
-class User {
-    constructor(public id: number, public name: string) {}
+interface IUserService {
+    users: number;
+    getUserInDatabase(): number;
 }
 
-function getData(id: number): User {
-    return new User(id, "Вася")
+// Инициализация происходит в порядке в котором они написаны, а исполняются уже в обратном порядке
+@threeUserAdvancend
+@setUsers(2) // 2 вывод
+@log() // 2 вывод
+@setUserAdvancend(4) // 4 вывод
+@nullUser
+class UserService implements IUserService {
+    users!: number;
+
+    getUserInDatabase(): number {
+        return this.users;
+    }
 }
 
-type RT = ReturnType<typeof getData> //RT = User
-type RT2 = ReturnType<() => void> //RT = Void
-type RT3 = ReturnType<<T>() => T> //RT = Unknown
-type RT4 = ReturnType<<T extends string>() => T> //RT = string
+function nullUser(target: Function) {
+    target.prototype.users = 0;
+}
 
-type PT = Parameters<typeof getData> // PT = [id : number]
-type PTnum = Parameters<typeof getData>[0] // Короткая запись, чтоб получить number
+function setUsers(users: number) {
+    return (target: Function) => {
+        target.prototype.users = users;
+    } 
+}
 
-type first = PT[0] // Альтернативный вариант
+function log() {
+    return (target: Function) => {
 
-type CP = ConstructorParameters<typeof User>; // CP = [id: number, name: string]
-type IT = InstanceType<typeof User>; // IT = User instance
+    }
+}
+
+function setUserAdvancend(users: number) {
+    return <T extends {new(...args: any[]): {}}>(constructor: T) => {
+        return class extends constructor {
+            users = 3;
+        }
+    }
+}
+
+function threeUserAdvancend<T extends {new(...args: any[]): {}}>(constructor: T) {
+    return class extends constructor {
+        users = 3;
+    }
+}
+
+console.log(new UserService().getUserInDatabase()); // 1000
+
+
 ```
 
 
