@@ -1,8 +1,8 @@
 # Манипуляция с типами в TypeScript
 
-### Начало 05.06.2023 г. - конец 05.06.2023 г. 
+### Начало 06.06.2023 г. - конец **.**.2023 г. 
 
-### 4 Уроков суммарно
+### ** Уроков суммарно
 
 [Вернуться на главную страницу "TS-Practice"](https://github.com/skaylife/TS-Practice)
 
@@ -10,7 +10,7 @@
 
 [1. Паттерн декоратора ](#1)
 
-[2. Pick, Omit, Extract, Exclude ](#2)
+[2. Декоратор класса ](#2)
 
 [3. ReturnType, Parameters, ConstructorParameters ](#3)
 
@@ -52,32 +52,37 @@ console.log(logUsers(nullUser(new UserService)).getUserInDatabase()); // 0
 ### - ([К списку других тем](#start))
 ## 2. Pick, Omit, Extract, Exclude <a name="2"></a> 
 
+Чтоб не выдавало ошибку при использовании декораторов нужно в `tsconfig.json` активировать строчку `"experimentalDecorators": true,`
+
  ```
-interface PaymentPersistence {
-    id: number;
-    sum: number;
-    from: string;
-    to: string;
+interface IUserService {
+    users: number;
+    getUserInDatabase(): number;
 }
 
-// Исключение id bp type Payment
-type Payment = Omit<PaymentPersistence, "id">
-// Вывод
-// type Payment {
-//     sum: number;
-//     from: string;
-//     to: string;
-// }
+@threeUserAdvancend
+@nullUser
+class UserService implements IUserService {
+    users!: number;
 
-// Pick взять только from и to
-type PaymentRequisits = Pick<PaymentPersistence, "from" | "to"> 
-// type PaymentPersistence {
-//     from: string;
-//     to: string;
-// }
+    getUserInDatabase(): number {
+        return this.users;
+    }
+}
 
-type ExtractEx = Extract<'from' | 'to' | Payment, string>; // Взять только from , to
-type ExcludeEx = Exclude<'from' | 'to' | Payment, string>; // Наобарот будут все
+function nullUser(target: Function) {
+    target.prototype.users = 0;
+}
+
+function threeUserAdvancend<T extends {new(...args: any[]): {}}>(constructor: T) {
+    return class extends constructor {
+        users = 3;
+    }
+}
+
+console.log(new UserService().getUserInDatabase()); // 1000
+
+
  ```
 
 ### - ([К списку других тем](#start))
