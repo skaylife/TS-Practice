@@ -16,6 +16,8 @@
 
 [4. Упражнение - Декоратор CreatedAt ](#4)
 
+[5. Декоратор метода ](#5)
+
 ## 1. Паттерн декоратора <a name="1"></a> 
 
 Пример реализации декоратора через функцию(и)
@@ -177,6 +179,53 @@ type CreatedAt = {
 }
 
 console.log((new UserService() as IUserService & CreatedAt).createdAt)
+```
+
+### - ([К списку других тем](#start))
+
+## 5. Декоратор метода <a name="5"></a> 
+
+Декоратор `@Log()` модифицирует и меняет результат работы метода класса `UserService` метод `getUsersInDatabase()` на 
+
+```
+descriptor.value = () => {
+    console.log('no error')
+}
+```
+
+в результате вывод будет не `throw new Error('Ошибка ')` а будет `console.log('no error')`
+
+```javascript
+
+    interface IUserService {
+    users: number;
+    getUsersInDatabase(): number;
+}
+
+class UserService implements IUserService {
+    users: number = 1000;
+
+    @Log()
+    getUsersInDatabase(): number {
+        throw new Error('Ошибка ')
+    }
+}
+
+function Log() {
+    return (
+        target: Object,
+        propertyKey: string | symbol,
+        descriptor: TypedPropertyDescriptor<(...args: any[]) => any>
+    ) : TypedPropertyDescriptor<(...args: any[]) => any> | void => {
+        console.log(target) // target где метод находится 
+        console.log(propertyKey) // propertykey понять что это за метод 
+        console.log(descriptor) // descriptor где содержится сама эта функция и ее параметры
+        descriptor.value = () => {
+            console.log('no error')
+        }
+    }
+}
+
 ```
 
 ### - ([К списку других тем](#start))
