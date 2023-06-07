@@ -18,6 +18,8 @@
 
 [5. Декоратор метода ](#5)
 
+[6. Упражнение - Декоратор перехвата ошибок ](#6)
+
 ## 1. Паттерн декоратора <a name="1"></a> 
 
 Пример реализации декоратора через функцию(и)
@@ -197,7 +199,7 @@ descriptor.value = () => {
 
 ```javascript
 
-    interface IUserService {
+interface IUserService {
     users: number;
     getUsersInDatabase(): number;
 }
@@ -226,6 +228,48 @@ function Log() {
     }
 }
 
+```
+
+### - ([К списку других тем](#start))
+
+## 6. Упражнение - Декоратор перехвата ошибок <a name="6"></a> 
+
+```
+interface IUserService {
+    users: number;
+    getUsersInDatabase(): number;
+}
+
+class UserService implements IUserService {
+    users: number = 1000;
+
+    @Catch({ rethrow: true })
+    getUsersInDatabase(): number {
+        throw new Error('Ошибка ')
+    }
+}
+
+function Catch({rethrow}: {rethrow: boolean} = {rethrow : true}) {
+    return (
+        target: Object,
+        _: string | symbol,
+        descriptor: TypedPropertyDescriptor<(...args: any[]) => any>
+    ) : TypedPropertyDescriptor<(...args: any[]) => any> | void => {
+        const method = descriptor.value;
+        descriptor.value = async (...args: any[]) => {
+            try {
+                return await method?.apply(target, args)
+            } catch(e) {
+                if (e instanceof Error) {
+                    console.log(e.message)
+                    if (rethrow) {
+                        throw e;
+                    }
+                }
+            }
+        }
+    }
+}
 ```
 
 ### - ([К списку других тем](#start))
