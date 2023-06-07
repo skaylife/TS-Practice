@@ -14,7 +14,7 @@
 
 [3. Фабрика декораторов ](#3)
 
-[4. Awaited ](#4)
+[4. Упражнение - Декоратор CreatedAt ](#4)
 
 ## 1. Паттерн декоратора <a name="1"></a> 
 
@@ -149,26 +149,34 @@ console.log(new UserService().getUserInDatabase()); // 1000
 
 ### - ([К списку других тем](#start))
 
-## 4. Awaited <a name="4"></a> 
+## 4. Упражнение - Декоратор CreatedAt <a name="4"></a> 
 
+Пример создание декоратора, он не делает модфикацию class я создает экземпляр с дополнительным свойством `createAt = new Date()` сам декоратор `@CreatedAt`
 ```
-type A = Awaited<Promise<string>> // Вернет нам промис стринг
-type A2 = Awaited<Promise<Promise<string>>> // Свложенным промисом 
-
-interface IMenu {
-    name: string;
-    url: string;
+interface IUserService {
+    users: number;
+    getUsersInDatabase(): number;
 }
 
-async function getMenu():Promise<IMenu[]> {
-    return [{name: "Аналитика", url: "analytics"}]
+@CreatedAt
+class UserService implements IUserService {
+    users: number = 1000;
+    getUsersInDatabase(): number {
+        return this.users
+    }
 }
 
-type R = Awaited<ReturnType<typeof getMenu>>
-
-async function getArray<T>(x: T) {
-    return [await x]
+function CreatedAt<T extends {new(...args: any[]): {}}>(constructor: T) {
+    return class extends constructor {
+        createdAt = new Date();
+    }
 }
+
+type CreatedAt = {
+    createdAt: Date;
+}
+
+console.log((new UserService() as IUserService & CreatedAt).createdAt)
 ```
 
 ### - ([К списку других тем](#start))
