@@ -20,6 +20,8 @@
 
 [6. Упражнение - Декоратор перехвата ошибок ](#6)
 
+[7. Декоратор свойства ](#7)
+
 ## 1. Паттерн декоратора <a name="1"></a> 
 
 Пример реализации декоратора через функцию(и)
@@ -270,6 +272,59 @@ function Catch({rethrow}: {rethrow: boolean} = {rethrow : true}) {
         }
     }
 }
+```
+
+### - ([К списку других тем](#start))
+
+## 7. Декоратор свойства <a name="7"></a> 
+
+Пример одной из валидаций через декоратор
+
+```
+interface IUserService {
+    users: number;
+    getUsersInDatabase(): number;
+}
+
+class UserService implements IUserService {
+    @Max(100)
+    users: number = 1000;
+
+    getUsersInDatabase(): number {
+        throw new Error('Ошибка ')
+    }
+}
+
+function Max(max: number) {
+    return(
+        target: Object,
+        propertyKey: string | symbol
+    ) => {
+        let value: number;
+        const setter = function (newValue: number) {
+            if (newValue > max) {
+                console.log("Нельзя утсановить значение больше " + max)
+            } else {
+                value = newValue;
+            }
+        }
+
+        const getter = function () {
+            return value;
+        }
+
+        Object.defineProperty(target, propertyKey, {
+            set: setter,
+            get: getter
+        })
+    }
+}
+
+const userService = new UserService();
+userService.users = 1;
+console.log(userService.users)
+userService.users = 1000;
+console.log(userService.users)
 ```
 
 ### - ([К списку других тем](#start))
