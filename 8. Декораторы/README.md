@@ -22,6 +22,8 @@
 
 [7. Декоратор свойства ](#7)
 
+[8 Декоратор accessor ](#8)
+
 ## 1. Паттерн декоратора <a name="1"></a> 
 
 Пример реализации декоратора через функцию(и)
@@ -324,6 +326,56 @@ const userService = new UserService();
 userService.users = 1;
 console.log(userService.users)
 userService.users = 1000;
+console.log(userService.users)
+```
+
+### - ([К списку других тем](#start))
+
+## 8 Декоратор accessor <a name="8"></a> 
+
+`descriptor` настроен для `setter`a сототвенно декоартор `Log()` можно вызвать и дописать `getter` в функции `Log()`
+
+Нельзя вставить два декоратора на `setter` и на `getter` одновременно в этом особенность `accessor'a`
+Но действие будет распостраняться на оба.
+
+```
+interface IUserService {
+    users: number;
+    getUsersInDatabase(): number;
+}
+
+class UserService implements IUserService {
+    private _users!: number;
+    @Log()
+    set users(num: number) {
+        this._users = num;
+    }
+
+    get users() {
+        return this._users;
+    }
+
+    getUsersInDatabase(): number {
+        throw new Error('Ошибка ')
+    }
+}
+
+function Log() {
+    return(
+        target: Object,
+        _: string | symbol,
+        descriptor: PropertyDescriptor
+    ) => {
+        const set = descriptor.set;
+        descriptor.set = (...args: any) => {
+            console.log(args)
+            set?.apply(target, args)
+        }
+    }
+}
+
+const userService = new UserService();
+userService.users = 1;
 console.log(userService.users)
 ```
 
