@@ -22,7 +22,9 @@
 
 [7. Декоратор свойства ](#7)
 
-[8 Декоратор accessor ](#8)
+[8. Декоратор accessor ](#8)
+
+[9. Декоратор параметра ](#9)
 
 ## 1. Паттерн декоратора <a name="1"></a> 
 
@@ -331,7 +333,7 @@ console.log(userService.users)
 
 ### - ([К списку других тем](#start))
 
-## 8 Декоратор accessor <a name="8"></a> 
+## 8. Декоратор accessor <a name="8"></a> 
 
 `descriptor` настроен для `setter`a сототвенно декоартор `Log()` можно вызвать и дописать `getter` в функции `Log()`
 
@@ -377,6 +379,42 @@ function Log() {
 const userService = new UserService();
 userService.users = 1;
 console.log(userService.users)
+```
+
+### - ([К списку других тем](#start))
+
+## 8. Декоратор accessor <a name="8"></a> 
+
+```
+interface IUserService {
+    getUsersInDatabase(): number;
+}
+
+class UserService implements IUserService {
+    private _users!: number;
+
+    getUsersInDatabase(): number {
+        return this._users
+    }
+
+    setUsersInDatabase(@Positive() num: number): void {
+        this._users = num;
+    }
+}
+
+function Positive() {
+    return(
+        target: Object,
+        propertyKey: string | symbol,
+        parameterIndex: number,
+    ) => {
+        console.log(target)
+        console.log(propertyKey)
+        console.log(parameterIndex)
+    }
+}
+
+const userService = new UserService();
 ```
 
 ### - ([К списку других тем](#start))
