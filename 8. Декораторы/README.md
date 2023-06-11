@@ -26,6 +26,8 @@
 
 [9. Декоратор параметра ](#9)
 
+[10. Метаданные ](#10)
+
 ## 1. Паттерн декоратора <a name="1"></a> 
 
 Пример реализации декоратора через функцию(и)
@@ -416,5 +418,47 @@ function Positive() {
 
 const userService = new UserService();
 ```
+
+### - ([К списку других тем](#start))
+
+## 9. Декоратор параметра <a name="9"></a> 
+
+```
+interface IUserService {
+    getUsersInDatabase(): number;
+}
+
+class UserService implements IUserService {
+    private _users!: number;
+
+    getUsersInDatabase(): number {
+        return this._users
+    }
+
+    setUsersInDatabase(@Positive() num: number): void {
+        this._users = num;
+    }
+}
+
+function Positive() {
+    return(
+        target: Object,
+        propertyKey: string | symbol,
+        parameterIndex: number,
+    ) => {
+        console.log(target)
+        console.log(propertyKey)
+        console.log(parameterIndex)
+    }
+}
+
+const userService = new UserService();
+```
+
+### - ([К списку других тем](#start))
+
+## 10. Метаданные <a name="10"></a> 
+
+Тема не зафиксированна, Но смсыл в чем в том что код из примеров выше мы с вами валидируем раскомментируем строчку в `tsconfig.json` с названием `"emitDecoratorMetadata": true,` дальше в ран тайм у нас в итогов файле `js` появляются `_meatadate` с метаданными и в можем записать в них правильные реузлтаты и написать проверку если данные будут не верны. 
 
 ### - ([К списку других тем](#start))
