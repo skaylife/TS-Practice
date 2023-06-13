@@ -36,7 +36,7 @@
 interface IUserService {
     users: number;
     getUserInDatabase(): number;
-} 
+}  
 
 class UserService implements IUserService {
     users: number = 1000;
