@@ -14,7 +14,7 @@
 
 [3. Модульность на frontend ](#3)
 
-[4. Упражнение - Декоратор CreatedAt ](#4)
+[4. Import и export ](#4)
 
 [5. Декоратор метода ](#5)
 
@@ -81,38 +81,46 @@ console.log(a)
 - Создана папка `src-test` с файлом `index.html`
 При подключении и конвертации файла был использован файл `app.js`
 
-Подключение с TypeScript нужно использовать в `index.html` строчку `<script src="../app.js" type="module"></script>` `type="module"`
+Подключение к `index.html` конвертированного файла с TypeScript на JavaScript нужно добавить строчку `<script src="../app.js" type="module"></script>` `type="module"`
 
 ### - ([К списку других тем](#start))
 
-## 4. Упражнение - Декоратор CreatedAt <a name="4"></a> 
+## 4. Import и export <a name="4"></a> 
 
-Пример создание декоратора, он не делает модфикацию class я создает экземпляр с дополнительным свойством `createAt = new Date()` сам декоратор `@CreatedAt`
+Файл `app.ts`
 ```
-interface IUserService {
-    users: number;
-    getUsersInDatabase(): number;
+import { a, MyType2 } from './module/app2'
+// import run , { a } from './module/app2'
+import run from './module/app2' // default import
+import * as all from './module/app2' // берем все export + default
+import {Test as CL} from './module/app2' // берем Test export и переименовываем в CL
+import {type MyType as MT} from './module/app2' // берем MyType и задаем для транспиляторов что там будет только tpye
+
+run()
+new CL();
+console.log(a)
+console.log(all.a)
+```
+
+Файл `app2.ts`
+
+```
+export const a = 5;
+
+export class  Test {}
+
+export const obj = {}
+
+export default function run() {
+    console.log("run")
 }
 
-@CreatedAt
-class UserService implements IUserService {
-    users: number = 1000;
-    getUsersInDatabase(): number {
-        return this.users
-    }
+export interface B {
+    c: number;
 }
 
-function CreatedAt<T extends {new(...args: any[]): {}}>(constructor: T) {
-    return class extends constructor {
-        createdAt = new Date();
-    }
-}
-
-type CreatedAt = {
-    createdAt: Date;
-}
-
-console.log((new UserService() as IUserService & CreatedAt).createdAt)
+export type MyType = string | number;
+export type MyType2 = string | number;
 ```
 
 ### - ([К списку других тем](#start))
