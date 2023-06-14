@@ -12,7 +12,7 @@
 
 [2. Модульность на backend ](#2)
 
-[3. Фабрика декораторов ](#3)
+[3. Модульность на frontend ](#3)
 
 [4. Упражнение - Декоратор CreatedAt ](#4)
 
@@ -47,7 +47,7 @@ namespace A {
 
 код из файла 
 
-app2.ts
+`app2.ts`
 ```
 export const a = 5;
 
@@ -56,7 +56,7 @@ export interface B {
 }
 ```
 
-./app.ts -код из файла
+`./app.ts` -код из файла
 ```
 import { a } from './module/app2'
 
@@ -64,69 +64,24 @@ console.log(a)
 ```
 
 в `tsconfig.json`
-используется `"module": "commonjs",  `
+используется `"module": "commonjs",`
 
 ### - ([К списку других тем](#start))
 
-## 3. Фабрика декораторов <a name="3"></a> 
+## 3. Модульность на frontend <a name="3"></a> 
 
-Инициализация происходит в порядке в котором они написаны, а исполняются уже в обратном порядке
+### Чтоб поднять сервер на `node js`
 
-```
-interface IUserService {
-    users: number;
-    getUserInDatabase(): number;
-}
+Нужно установить пакет => `npm i -g serve`
 
-// Инициализация происходит в порядке в котором они написаны, а исполняются уже в обратном порядке
-@threeUserAdvancend
-@setUsers(2) // 2 вывод
-@log() // 2 вывод
-@setUserAdvancend(4) // 4 вывод
-@nullUser
-class UserService implements IUserService {
-    users!: number;
+Запуск сервера => `serve .`
 
-    getUserInDatabase(): number {
-        return this.users;
-    }
-}
+-в `tsconfig.json`
+-Параметр `"module": "ES6",` на `ES6`
+- Создана папка `src-test` с файлом `index.html`
+При подключении и конвертации файла был использован файл `app.js`
 
-function nullUser(target: Function) {
-    target.prototype.users = 0;
-}
-
-function setUsers(users: number) {
-    return (target: Function) => {
-        target.prototype.users = users;
-    } 
-}
-
-function log() {
-    return (target: Function) => {
-
-    }
-}
-
-function setUserAdvancend(users: number) {
-    return <T extends {new(...args: any[]): {}}>(constructor: T) => {
-        return class extends constructor {
-            users = 3;
-        }
-    }
-}
-
-function threeUserAdvancend<T extends {new(...args: any[]): {}}>(constructor: T) {
-    return class extends constructor {
-        users = 3;
-    }
-}
-
-console.log(new UserService().getUserInDatabase()); // 1000
-
-
-```
-
+Подключение с TypeScript нужно использовать в `index.html` строчку `<script src="../app.js" type="module"></script>` `type="module"`
 
 ### - ([К списку других тем](#start))
 
