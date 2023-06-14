@@ -473,7 +473,7 @@ function Uni(name: string): any {
     return function() {
         console.log(`Вызов: ${name}`)
     }
-}
+} 
 
 @Uni("Класс")
 class MyClass {
