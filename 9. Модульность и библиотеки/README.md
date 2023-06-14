@@ -10,7 +10,7 @@
 
 [1. Namespaces и reference ](#1)
 
-[2. Декоратор класса ](#2)
+[2. Модульность на backend ](#2)
 
 [3. Фабрика декораторов ](#3)
 
@@ -20,6 +20,8 @@
 
 
 ## 1. Namespaces и reference <a name="1"></a> 
+
+Чтоб это работало нужно в `tsconfig.ts` в параметре поставить `AMD` `module: "AMD"` раскомментировать `"outFile": "./app.js"`
 
 ```
 namespace A {
@@ -39,40 +41,30 @@ namespace A {
 ```
 
 ### - ([К списку других тем](#start))
-## 2. Pick, Omit, Extract, Exclude <a name="2"></a> 
+## 2. Модульность на backend <a name="2"></a> 
 
-Чтоб не выдавало ошибку при использовании декораторов нужно в `tsconfig.json` активировать строчку `"experimentalDecorators": true,`
++ folder `module` в котором есть файл `app2.ts` 
 
- ```
-interface IUserService {
-    users: number;
-    getUserInDatabase(): number;
+код из файла 
+
+app2.ts
+```
+export const a = 5;
+
+export interface B {
+    c: number;
 }
+```
 
-@threeUserAdvancend
-@nullUser
-class UserService implements IUserService {
-    users!: number;
+./app.ts -код из файла
+```
+import { a } from './module/app2'
 
-    getUserInDatabase(): number {
-        return this.users;
-    }
-}
+console.log(a)
+```
 
-function nullUser(target: Function) {
-    target.prototype.users = 0;
-}
-
-function threeUserAdvancend<T extends {new(...args: any[]): {}}>(constructor: T) {
-    return class extends constructor {
-        users = 3;
-    }
-}
-
-console.log(new UserService().getUserInDatabase()); // 1000
-
-
- ```
+в `tsconfig.json`
+используется `"module": "commonjs",  `
 
 ### - ([К списку других тем](#start))
 
