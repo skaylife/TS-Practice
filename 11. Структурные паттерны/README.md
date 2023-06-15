@@ -2,7 +2,7 @@
 
 ### Начало 15.06.2023 г. - конец **.**.2023 г.
 
-### 5. Уроков суммарно
+### 6. Уроков суммарно
 
 [Вернуться на главную страницу "TS-Practice"](https://github.com/skaylife/TS-Practice)
 
@@ -14,7 +14,9 @@
 
 [3. Adapter ](#3)
 
-[4. Builder ](#4)
+[4. Proxy  ](#4)
+
+[5. Composite ](#5)
 
 
 ## 1. Bridge <a name="1"></a> 
@@ -146,7 +148,7 @@ s.send('a@A.ru', 'other')
 
 ### - ([К списку других тем](#start))
 
-## 3. Prototype <a name="3"></a> 
+## 3. Adapter <a name="3"></a> 
 
 ```
 class KVDatabase {
@@ -185,74 +187,55 @@ run(new PersistentDBAdapter(new PersistentDB))
 
 ### - ([К списку других тем](#start))
 
-## 4. Builder <a name="4"></a> 
+## 4. Proxy <a name="4"></a> 
 
 ```
-enum ImageFormat {
-    Png = 'png',
-    Jpeg = 'jpeg' 
+interface IPaymentAPI {
+    getPaymentDetail(id: number): IPaymentDetail | undefined;
 }
 
-interface IResolution {
-    width: number,
-    height: number
+interface IPaymentDetail {
+    id: number,
+    sum: number,
 }
 
-interface IImageConversion extends IResolution {
-    format: ImageFormat
+class PaymentAPI implements IPaymentAPI {
+    private data = [{id: 1, sum: 10000}]
+    getPaymentDetail(id: number): IPaymentDetail | undefined {
+        return this.data.find(d => d.id === id)
+    }
 }
 
-class ImageBuilder {
-    private formats: ImageFormat[] = []
-    private resolutions: IResolution[] = []
+class PaymentAccessProxy {
+    constructor(private api: PaymentAPI, private userId: number) {}
 
-    addPng() {
-        if(this.formats.includes(ImageFormat.Png)) {
-            return this;
+    getPaymentDetail(id: number): IPaymentDetail | undefined {
+        if (this.userId === 1) {
+            return this.api.getPaymentDetail(id)
         }
-        this.formats.push(ImageFormat.Png);
-        return this;
-    }
-
-    addJpeg() {
-        if(this.formats.includes(ImageFormat.Jpeg)) {
-            return this;
-        }
-        this.formats.push(ImageFormat.Png);
-        return this;
-    }
-
-    addResolution(width: number, height: number) {
-        this.resolutions.push({ width, height });
-        return this;
-    }
-
-    build(): IImageConversion[] {
-        const res: IImageConversion[] = [];
-        for (const r of this.resolutions) {
-            for (const f of this.formats) {
-                    res.push(
-                        {   width: r.width, 
-                            height: r.height, 
-                            format: f });
-                }
-        }
-        return res;
+        console.log("Попытка получить данные платежа!")
+        return undefined;
     }
 }
 
-console.log(new ImageBuilder()
-    .addJpeg()
-    .addPng()
-    .addResolution(100, 50)
-    .addResolution(100, 80)
-    .build()
-)
+const proxy = new PaymentAccessProxy(new PaymentAPI(), 1)
+console.log(proxy.getPaymentDetail(1))
+
+const proxy2 = new PaymentAccessProxy(new PaymentAPI(), 2)
+console.log(proxy2.getPaymentDetail(1))
 
 // Console log
-  <!-- { width: 100, height: 50, format: 'png' },
-  { width: 100, height: 80, format: 'png' } -->
+
+{ id: 1, sum: 10000 }
+    Попытка получить данные платежа!
+    undefined
 ```
+
+### - ([К списку других тем](#start))
+
+## 5. Composite <a name="5"></a> 
+
+
 
 ### - ([К списку других тем](#start))
 
