@@ -12,7 +12,7 @@
 
 [2. Facade ](#2)
 
-[3. Prototype ](#3)
+[3. Adapter ](#3)
 
 [4. Builder ](#4)
 
@@ -149,30 +149,38 @@ s.send('a@A.ru', 'other')
 ## 3. Prototype <a name="3"></a> 
 
 ```
-interface Prototype<T> {
-    clone(): T;
-}
-
-class UserHistory implements Prototype<UserHistory> {
-    createdAt: Date;
-
-    constructor(public email: string, public name: string) {
-        this.createdAt = new Date();
-    }
-
-    clone(): UserHistory {
-        let target = new UserHistory(this.email, this.name)
-        target.createdAt = this.createdAt;
-        return target
+class KVDatabase {
+    private db: Map<string, string> = new Map();
+    save(key: string, value: string) {
+        this.db.set(key, value);
     }
 }
 
-let user = new UserHistory('a@a.ru', 'Skay')
-console.log(user)
-let user2 = user.clone();
-user2.email = "b@b.ru"
-console.log(user2)
-console.log(user)
+class PersistentDB {
+    savePersistent(data: Object) {
+        console.log(data)
+    }
+}
+
+class PersistentDBAdapter extends KVDatabase {
+    constructor(public database: PersistentDB) {
+        super();
+    }
+
+    override save( key: string, value: string): void {
+        this.database.savePersistent({key, value});
+    }
+}
+
+function run(base: KVDatabase) {
+    base.save("key", "myValue")
+}
+
+run(new PersistentDBAdapter(new PersistentDB))
+
+//Console log
+
+{ key: "key", value: "myValue" }
 ```
 
 ### - ([К списку других тем](#start))
