@@ -2,7 +2,7 @@
 
 ### Начало 15.06.2023 г. - конец **.**.2023 г.
 
-### 6. Уроков суммарно
+### 5. Уроков суммарно
 
 [Вернуться на главную страницу "TS-Practice"](https://github.com/skaylife/TS-Practice)
 
@@ -235,7 +235,64 @@ console.log(proxy2.getPaymentDetail(1))
 
 ## 5. Composite <a name="5"></a> 
 
+```
+abstract class DeliveryItem {
+    items: DeliveryItem[] = [];
 
+    addItem(item: DeliveryItem){
+        this.items.push(item);
+    }
+
+    getItemPrice(): number {
+        return this.items.reduce((acc: number, i: DeliveryItem)=> acc += i.getPrice(), 0);
+    };
+
+    abstract getPrice(): number
+}
+
+export class DeliveryShop extends DeliveryItem {
+    constructor(private deliveryFee: number) {
+        super();
+    }
+
+    getPrice(): number {
+        return this.getItemPrice() + this.deliveryFee;
+    }
+}
+
+class Package extends DeliveryItem {
+    getPrice(): number {
+        return this.getItemPrice();
+    }
+}
+
+class Product extends DeliveryItem {
+    constructor(private price: number) {
+        super();
+    }
+    getPrice(): number {
+        return this.price
+    }
+}
+
+const shop = new DeliveryShop(100);
+shop.addItem(new Product(1000));
+
+const pack1 = new Package()
+pack1.addItem(new Product(200));
+pack1.addItem(new Product(300));
+shop.addItem(pack1);
+
+const pack2 = new Package();
+pack2.addItem(new Product(20));
+shop.addItem(pack2);
+
+console.log("Общая сумма: " + shop.getPrice())
+
+// Console log
+
+Общая сумма: 1620
+```
 
 ### - ([К списку других тем](#start))
 
