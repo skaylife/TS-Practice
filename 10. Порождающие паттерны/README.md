@@ -1,8 +1,8 @@
 # Порождающие паттерны в TypeScript
 
-### Начало 14.06.2023 г. - конец 14.06.2023 г.
+### Начало 14.06.2023 г. - конец **.**.2023 г.
 
-### 5. Уроков суммарно
+### 4. Уроков суммарно
 
 [Вернуться на главную страницу "TS-Practice"](https://github.com/skaylife/TS-Practice)
 
@@ -10,7 +10,7 @@
 
 [1. Factory Method ](#1)
 
-[2. Модульность на backend ](#2)
+[2. Singleton ](#2)
 
 [3. Модульность на frontend ](#3)
 
@@ -122,30 +122,52 @@ insuranceFactoryAlt.saveHistory(ins2);
 ```
 
 ### - ([К списку других тем](#start))
-## 2. Модульность на backend <a name="2"></a> 
+## 2. Singleton <a name="2"></a> 
 
-+ folder `module` в котором есть файл `app2.ts` 
-
-код из файла 
-
-`app2.ts`
 ```
-export const a = 5;
+class MyMap {
+    private static instance: MyMap;
 
-export interface B {
-    c: number;
+    map: Map<number, string> = new Map();
+
+    private constructor() {}
+
+    clean() {
+        this.map = new Map();
+    }
+
+    public static get(): MyMap {
+        if(!MyMap.instance) {
+            MyMap.instance = new MyMap()
+        }
+        return MyMap.instance
+    }
 }
-```
 
-`./app.ts` -код из файла
-```
-import { a } from './module/app2'
+class Service1 {
+    addMap(key: number, value: string) {
+        // new MyMap() 
+        const myMap = MyMap.get()
+        myMap.map.set(key, value);
+    }
+}
 
-console.log(a)
-```
+class Service2 {
+    getKeys(key: number) {
+        // new MyMap() 
+        const myMap = MyMap.get()
+        myMap.clean();
+        console.log(myMap.map.get(key))
+    }
+}
 
-в `tsconfig.json`
-используется `"module": "commonjs",`
+new Service1().addMap(1, 'Работает');
+new Service2().getKeys(1)
+
+// Ввыод в консоли =>
+// Работает
+// undefined 
+```
 
 ### - ([К списку других тем](#start))
 
