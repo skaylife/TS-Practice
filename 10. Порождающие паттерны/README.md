@@ -12,7 +12,7 @@
 
 [2. Singleton ](#2)
 
-[3. Модульность на frontend ](#3)
+[3. Prototype ](#3)
 
 [4. Import и export ](#4)
 
@@ -171,20 +171,34 @@ new Service2().getKeys(1)
 
 ### - ([К списку других тем](#start))
 
-## 3. Модульность на frontend <a name="3"></a> 
+## 3. Prototype <a name="3"></a> 
 
-### Чтоб поднять сервер на `node js`
+```
+interface Prototype<T> {
+    clone(): T;
+}
 
-Нужно установить пакет => `npm i -g serve`
+class UserHistory implements Prototype<UserHistory> {
+    createdAt: Date;
 
-Запуск сервера => `serve .`
+    constructor(public email: string, public name: string) {
+        this.createdAt = new Date();
+    }
 
--в `tsconfig.json`
--Параметр `"module": "ES6",` на `ES6`
-- Создана папка `src-test` с файлом `index.html`
-При подключении и конвертации файла был использован файл `app.js`
+    clone(): UserHistory {
+        let target = new UserHistory(this.email, this.name)
+        target.createdAt = this.createdAt;
+        return target
+    }
+}
 
-Подключение к `index.html` конвертированного файла с TypeScript на JavaScript нужно добавить строчку `<script src="../app.js" type="module"></script>` `type="module"`
+let user = new UserHistory('a@a.ru', 'Skay')
+console.log(user)
+let user2 = user.clone();
+user2.email = "b@b.ru"
+console.log(user2)
+console.log(user)
+```
 
 ### - ([К списку других тем](#start))
 
