@@ -1,6 +1,6 @@
 # Порождающие паттерны в TypeScript
 
-### Начало 14.06.2023 г. - конец **.**.2023 г.
+### Начало 14.06.2023 г. - конец 15.06.2023 г.
 
 ### 4. Уроков суммарно
 
@@ -15,8 +15,6 @@
 [3. Prototype ](#3)
 
 [4. Builder ](#4)
-
-[5. Типизация сторонних библиотек ](#5)
 
 
 ## 1. Factory Method <a name="1"></a> 
@@ -269,50 +267,6 @@ console.log(new ImageBuilder()
 // Console log
   <!-- { width: 100, height: 50, format: 'png' },
   { width: 100, height: 80, format: 'png' } -->
-```
-
-### - ([К списку других тем](#start))
-
-## 5. Типизация сторонних библиотек <a name="5"></a> 
-
-#### Устанавливаем библиотеку `npm i really-relaxed-json`
-
-Берем пример кода работы библиотеки 
-
-```
-// - //@ts-ignore // Для того чтоб отключить проверку ts
-import {toJson} from 'really-relaxed-json'
-const rjson = '[ one two three {foo:bar} ]'
-const json = toJson(rjson)
-console.log(json)
-```
-
-- Создаем `file` => `type.d.ts` для типизации и создание сигнатуры функций библиотеки 
-
-Дальше заходим в папку `node_modules` => `really-relaxed-json` => `scr` => `index.js` ищем функцию `toJson`
-
-```
-toJson: function (rjsonString, compact = true) {
-    const parser = thePackage.RJsonParserFactory.Companion.getDefault().createParser();
-    const value = parser.stringToValue(rjsonString);
-    let opts;
-    if (compact) {
-        opts = thePackage.PrettyPrinter.Options.Companion.JsonCompact;
-    } else {
-        opts = thePackage.PrettyPrinter.Options.Companion.JsonPretty;
-    }
-    const printer = new thePackage.PrettyPrinter(opts);
-    return printer.valueToString(value);
-},
-```
-
-В созданном файле `type.d.ts` типизируем функцию. 
-
-Код из Файла - `type.d.ts`
-```
-declare module 'really-relaxed-json' {
-    export function toJson(rjsonString: string, compact?: boolean): string
-}
 ```
 
 ### - ([К списку других тем](#start))
