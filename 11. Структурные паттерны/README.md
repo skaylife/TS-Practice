@@ -1,8 +1,8 @@
-# Порождающие паттерны в TypeScript
+# Структурные паттерны в TypeScript
 
-### Начало 14.06.2023 г. - конец 15.06.2023 г.
+### Начало 15.06.2023 г. - конец **.**.2023 г.
 
-### 4. Уроков суммарно
+### 5. Уроков суммарно
 
 [Вернуться на главную страницу "TS-Practice"](https://github.com/skaylife/TS-Practice)
 
@@ -10,7 +10,7 @@
 
 [1. Bridge ](#1)
 
-[2. Singleton ](#2)
+[2. Facade ](#2)
 
 [3. Prototype ](#3)
 
@@ -88,51 +88,60 @@ disconnect WhatsApp
 ```
 
 ### - ([К списку других тем](#start))
-## 2. Singleton <a name="2"></a> 
+## 2. Facade <a name="2"></a> 
 
 ```
-class MyMap {
-    private static instance: MyMap;
+class Notify { 
+    send(template: string, to: string) {
+        console.log(`Отправляю ${template}, ${to}`);
+    }
+}
 
-    map: Map<number, string> = new Map();
+class Log {
+    log(message: string) {
+        console.log(message);
+    }
+}
 
-    private constructor() {}
+class Template {
+    private _template = [
+        { name: 'other', template: '<h1>Шаблоно</h1>'}
+    ]
 
-    clean() {
-        this.map = new Map();
+    getByName(name: string) {
+        return this._template.find(t => t.name === name)
+    }
+}
+
+class NotificationFacade {
+    private notify: Notify;
+    private logger: Log;
+    private template: Template;
+
+    constructor() {
+        this.notify = new Notify();
+        this.logger = new Log();
+        this.template = new Template();
     }
 
-    public static get(): MyMap {
-        if(!MyMap.instance) {
-            MyMap.instance = new MyMap()
+    send(to: string, templateName: string) {
+        const data = this.template.getByName(templateName);
+        if(!data) {
+            this.logger.log('Не найден шаблон')
+            return;
         }
-        return MyMap.instance
+        this.notify.send(data.template, to);
+        this.logger.log('Шаблон отправлен');
     }
 }
 
-class Service1 {
-    addMap(key: number, value: string) {
-        // new MyMap() 
-        const myMap = MyMap.get()
-        myMap.map.set(key, value);
-    }
-}
+const s = new NotificationFacade()
+s.send('a@A.ru', 'other')
 
-class Service2 {
-    getKeys(key: number) {
-        // new MyMap() 
-        const myMap = MyMap.get()
-        myMap.clean();
-        console.log(myMap.map.get(key))
-    }
-}
+//Console log 
 
-new Service1().addMap(1, 'Работает');
-new Service2().getKeys(1)
-
-// Ввыод в консоли =>
-// Работает
-// undefined 
+Отправляю <h1>Шаблоно</h1>, a@A.ru
+Шаблон отправлен
 ```
 
 ### - ([К списку других тем](#start))
