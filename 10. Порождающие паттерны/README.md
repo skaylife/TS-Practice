@@ -14,7 +14,7 @@
 
 [3. Prototype ](#3)
 
-[4. Import и export ](#4)
+[4. Builder ](#4)
 
 [5. Типизация сторонних библиотек ](#5)
 
@@ -202,42 +202,73 @@ console.log(user)
 
 ### - ([К списку других тем](#start))
 
-## 4. Import и export <a name="4"></a> 
-
-Файл `app.ts`
-```
-import { a, MyType2 } from './module/app2'
-// import run , { a } from './module/app2'
-import run from './module/app2' // default import
-import * as all from './module/app2' // берем все export + default
-import {Test as CL} from './module/app2' // берем Test export и переименовываем в CL
-import {type MyType as MT} from './module/app2' // берем MyType и задаем для транспиляторов что там будет только tpye
-
-run()
-new CL();
-console.log(a)
-console.log(all.a)
-```
-
-Файл `app2.ts`
+## 4. Builder <a name="4"></a> 
 
 ```
-export const a = 5;
-
-export class  Test {}
-
-export const obj = {}
-
-export default function run() {
-    console.log("run")
+enum ImageFormat {
+    Png = 'png',
+    Jpeg = 'jpeg' 
 }
 
-export interface B {
-    c: number;
+interface IResolution {
+    width: number,
+    height: number
 }
 
-export type MyType = string | number;
-export type MyType2 = string | number;
+interface IImageConversion extends IResolution {
+    format: ImageFormat
+}
+
+class ImageBuilder {
+    private formats: ImageFormat[] = []
+    private resolutions: IResolution[] = []
+
+    addPng() {
+        if(this.formats.includes(ImageFormat.Png)) {
+            return this;
+        }
+        this.formats.push(ImageFormat.Png);
+        return this;
+    }
+
+    addJpeg() {
+        if(this.formats.includes(ImageFormat.Jpeg)) {
+            return this;
+        }
+        this.formats.push(ImageFormat.Png);
+        return this;
+    }
+
+    addResolution(width: number, height: number) {
+        this.resolutions.push({ width, height });
+        return this;
+    }
+
+    build(): IImageConversion[] {
+        const res: IImageConversion[] = [];
+        for (const r of this.resolutions) {
+            for (const f of this.formats) {
+                    res.push(
+                        {   width: r.width, 
+                            height: r.height, 
+                            format: f });
+                }
+        }
+        return res;
+    }
+}
+
+console.log(new ImageBuilder()
+    .addJpeg()
+    .addPng()
+    .addResolution(100, 50)
+    .addResolution(100, 80)
+    .build()
+)
+
+// Console log
+  <!-- { width: 100, height: 50, format: 'png' },
+  { width: 100, height: 80, format: 'png' } -->
 ```
 
 ### - ([К списку других тем](#start))
