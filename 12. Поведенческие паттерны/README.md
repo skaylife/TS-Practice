@@ -10,7 +10,7 @@
 
 [1. Chain of Command ](#1)
 
-[2. Facade ](#2)
+[2. Mediator ](#2)
 
 [3. Adapter ](#3)
 
@@ -87,12 +87,25 @@ Controller
 ```
 
 ### - ([К списку других тем](#start))
-## 2. Facade <a name="2"></a> 
+
+## 2. Mediator <a name="2"></a> 
 
 ```
-class Notify { 
-    send(template: string, to: string) {
-        console.log(`Отправляю ${template}, ${to}`);
+interface Mediator {
+    notify(sender: string, event: string): void 
+}
+
+abstract class Mediated {
+    mediator!: Mediator;
+    setMediator(mediator: Mediator) {
+        this.mediator = mediator
+    }
+}
+
+// Функции которые мы используем 
+class Notifications {
+    send() {
+        console.log('Отправляю уведомление');
     }
 }
 
@@ -102,45 +115,40 @@ class Log {
     }
 }
 
-class Template {
-    private _template = [
-        { name: 'other', template: '<h1>Шаблоно</h1>'}
-    ]
-
-    getByName(name: string) {
-        return this._template.find(t => t.name === name)
+class EventHandler extends Mediated {
+    myEvent() {
+        this.mediator.notify("EventHandler", "MyEvent")
     }
 }
 
-class NotificationFacade {
-    private notify: Notify;
-    private logger: Log;
-    private template: Template;
-
-    constructor() {
-        this.notify = new Notify();
-        this.logger = new Log();
-        this.template = new Template();
-    }
-
-    send(to: string, templateName: string) {
-        const data = this.template.getByName(templateName);
-        if(!data) {
-            this.logger.log('Не найден шаблон')
-            return;
+// Основная близнес логика
+class NotificationMediator implements Mediator {
+    constructor(
+        public notification: Notifications,
+        public Logger: Log,
+        public handler: EventHandler
+    ) {}
+    notify(_: string, event: string): void {
+        switch(event) {
+            case 'myEvent':
+                this.notification.send();
+                this.Logger.log("Отправленно")
+                break;
         }
-        this.notify.send(data.template, to);
-        this.logger.log('Шаблон отправлен');
     }
 }
 
-const s = new NotificationFacade()
-s.send('a@A.ru', 'other')
+const handler = new EventHandler()
+const logger = new Log()
+const notification = new Notifications()
 
-//Console log 
-
-Отправляю <h1>Шаблоно</h1>, a@A.ru
-Шаблон отправлен
+const m = new NotificationMediator(
+    notification,
+    logger,
+    handler
+);
+handler.setMediator(m);
+handler.myEvent()
 ```
 
 ### - ([К списку других тем](#start))
