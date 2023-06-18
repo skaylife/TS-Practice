@@ -12,7 +12,7 @@
 
 [2. Mediator ](#2)
 
-[3. Adapter ](#3)
+[3. Command ](#3)
 
 [4. Proxy  ](#4)
 
@@ -156,38 +156,101 @@ handler.myEvent()
 ## 3. Adapter <a name="3"></a> 
 
 ```
-class KVDatabase {
-    private db: Map<string, string> = new Map();
-    save(key: string, value: string) {
-        this.db.set(key, value);
+class User {
+    constructor(public userId: number) {
+
     }
 }
 
-class PersistentDB {
-    savePersistent(data: Object) {
-        console.log(data)
+class CommandHistory {
+    public commands: Command[] = [];
+    push(command: Command) {
+        this.commands.push(command);
+    }
+    remove(command: Command) {
+        this.commands = this.commands.filter(c=> c.commandId !== command.commandId)
     }
 }
 
-class PersistentDBAdapter extends KVDatabase {
-    constructor(public database: PersistentDB) {
-        super();
-    }
+abstract class Command {
+    public commandId: number
 
-    override save( key: string, value: string): void {
-        this.database.savePersistent({key, value});
+    abstract execute(): void;
+
+    constructor(public history:  CommandHistory) {
+        this.commandId = Math.random()
     }
 }
 
-function run(base: KVDatabase) {
-    base.save("key", "myValue")
+class AddUserCommand extends Command {
+    constructor(
+        private user: User, 
+        private receiver: UserService, 
+        history: CommandHistory) {
+        super(history)
+    }
+
+    execute(): void {
+        this.receiver.saveUser(this.user)
+        this.history.push(this)
+    }
+
+    undo() {
+        this.receiver.deleteUser(this.user.userId)
+        this.history.remove(this)
+    }
 }
 
-run(new PersistentDBAdapter(new PersistentDB))
+class UserService {
+    saveUser(user: User) {
+        console.log(`Сохраняю пользователя с id ${user.userId}`);
+    }
+    deleteUser(userId: number) {
+        console.log(`Удаляю пользователя с id ${userId}`);
+    }
+}
 
-//Console log
+class Controller {
+    receiver!: UserService;
+    history: CommandHistory = new CommandHistory;
 
-{ key: "key", value: "myValue" }
+    addReceiver(receiver: UserService) {
+        this.receiver = receiver;
+    }
+
+    run() {
+        const addUserCommand = new AddUserCommand(
+            new User(1), 
+            this.receiver, 
+            this.history
+        )
+        addUserCommand.execute();
+        console.log(addUserCommand.history)
+        addUserCommand.undo();
+        console.log(addUserCommand.history)
+    }
+}
+
+const controller = new Controller();
+controller.addReceiver(new UserService());
+controller.run()
+
+/// Console log
+
+Сохраняю пользователя с id 1
+<ref *1> CommandHistory {
+  commands: [
+    AddUserCommand {
+      history: [Circular *1],
+      commandId: 0.8042982789668081,
+      user: [User],
+      receiver: UserService {}
+    }
+  ]
+}
+Удаляю пользователя с id 1
+CommandHistory { commands: [] }
+
 ```
 
 ### - ([К списку других тем](#start))
