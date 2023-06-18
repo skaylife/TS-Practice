@@ -16,7 +16,7 @@
 
 [4. State  ](#4)
 
-[5. Composite ](#5)
+[5. Strategy ](#5)
 
 
 ## 1. Chain of Command <a name="1"></a> 
@@ -356,66 +356,59 @@ console.log(item.getState());
 
 ### - ([К списку других тем](#start))
 
-## 5. Composite <a name="5"></a> 
+## 5. Strategy <a name="5"></a> 
 
 ```
-abstract class DeliveryItem {
-    items: DeliveryItem[] = [];
-
-    addItem(item: DeliveryItem){
-        this.items.push(item);
-    }
-
-    getItemPrice(): number {
-        return this.items.reduce((acc: number, i: DeliveryItem)=> acc += i.getPrice(), 0);
-    };
-
-    abstract getPrice(): number
+class User {
+    githubToken!: string;
+    jwtToken!: string;
 }
 
-export class DeliveryShop extends DeliveryItem {
-    constructor(private deliveryFee: number) {
-        super();
-    }
+interface AuthStratagy {
+    auth(user: User): boolean;
+}
 
-    getPrice(): number {
-        return this.getItemPrice() + this.deliveryFee;
+class Auth {
+    constructor(private strategy: AuthStratagy) {}
+
+    setStategy(strategy: AuthStratagy) {
+        this.strategy = strategy;
+    }
+    public authUser(user: User): boolean {
+        return this.strategy.auth(user);
     }
 }
 
-class Package extends DeliveryItem {
-    getPrice(): number {
-        return this.getItemPrice();
+class JWTStrategy implements AuthStratagy {
+    auth(user: User): boolean {
+        if(user.jwtToken) {
+            return true;
+        }
+        return false;
     }
 }
 
-class Product extends DeliveryItem {
-    constructor(private price: number) {
-        super();
-    }
-    getPrice(): number {
-        return this.price
+class GitGubStrategy implements AuthStratagy {
+    auth(user: User): boolean {
+        if(user.githubToken) {
+            // Получае от api GitHub данные
+            return true;
+        }
+        return false;
     }
 }
 
-const shop = new DeliveryShop(100);
-shop.addItem(new Product(1000));
+const user = new User();
+user.jwtToken = "token";
+const auth = new Auth(new JWTStrategy());
+console.log(auth.authUser(user));
+auth.setStategy(new GitGubStrategy)
+console.log(auth.authUser(user));
 
-const pack1 = new Package()
-pack1.addItem(new Product(200));
-pack1.addItem(new Product(300));
-shop.addItem(pack1);
+/// Console log
 
-const pack2 = new Package();
-pack2.addItem(new Product(20));
-shop.addItem(pack2);
-
-console.log("Общая сумма: " + shop.getPrice())
-
-// Console log
-
-Общая сумма: 1620
+true
+false
 ```
 
 ### - ([К списку других тем](#start))
-
