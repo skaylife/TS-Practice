@@ -14,7 +14,7 @@
 
 [3. Command ](#3)
 
-[4. Proxy  ](#4)
+[4. State  ](#4)
 
 [5. Composite ](#5)
 
@@ -153,7 +153,7 @@ handler.myEvent()
 
 ### - ([К списку других тем](#start))
 
-## 3. Adapter <a name="3"></a> 
+## 3. Command <a name="3"></a> 
 
 ```
 class User {
@@ -255,48 +255,103 @@ CommandHistory { commands: [] }
 
 ### - ([К списку других тем](#start))
 
-## 4. Proxy <a name="4"></a> 
+## 4. State <a name="4"></a> 
 
 ```
-interface IPaymentAPI {
-    getPaymentDetail(id: number): IPaymentDetail | undefined;
-}
+class DocumentItem {
+    public text!: string;
+    private state!: DocumentItemState;
 
-interface IPaymentDetail {
-    id: number,
-    sum: number,
-}
+    constructor() {
+        this.setState(new DraftDocumentItemState())
+    }
 
-class PaymentAPI implements IPaymentAPI {
-    private data = [{id: 1, sum: 10000}]
-    getPaymentDetail(id: number): IPaymentDetail | undefined {
-        return this.data.find(d => d.id === id)
+    getState() {
+        return this.state;
+    }
+
+    setState(state: DocumentItemState) {
+        this.state = state;
+        this.state.setContext(this)
+    }
+
+    publishDoc() {
+        this.state.publish()
+    }
+
+    deleteDoc() {
+        this.state.delete()
     }
 }
 
-class PaymentAccessProxy {
-    constructor(private api: PaymentAPI, private userId: number) {}
+abstract class DocumentItemState {
+    public name!: string;
+    public item!: DocumentItem;
 
-    getPaymentDetail(id: number): IPaymentDetail | undefined {
-        if (this.userId === 1) {
-            return this.api.getPaymentDetail(id)
-        }
-        console.log("Попытка получить данные платежа!")
-        return undefined;
+    public setContext(item: DocumentItem) {
+        this.item = item;
+    }
+
+    public abstract publish(): void;
+    public abstract delete(): void;
+}
+
+class DraftDocumentItemState extends DocumentItemState {
+    constructor() {
+        super();
+        this.name = "DraftDocument"
+    }
+
+    public publish(): void {
+        console.log(`На сайт отправлен текст ${this.item.text}`)
+        this.item.setState(new PublishDocumentItemState)
+    }
+    public delete(): void {
+        console.log(`Документ удален`)
     }
 }
 
-const proxy = new PaymentAccessProxy(new PaymentAPI(), 1)
-console.log(proxy.getPaymentDetail(1))
+class PublishDocumentItemState extends DocumentItemState {
+    constructor() {
+        super();
+        this.name = "PublishDocument"
+    }
 
-const proxy2 = new PaymentAccessProxy(new PaymentAPI(), 2)
-console.log(proxy2.getPaymentDetail(1))
+    public publish(): void {
+        console.log("Нельзя опубликовать опубликованный документ")
+    }
+    public delete(): void {
+        console.log("Снято с публикации")
+        this.item.setState(new DraftDocumentItemState)
+    }
+}
+
+const item = new DocumentItem();
+item.text = "Мой пост"
+console.log(item.getState());
+item.publishDoc()
+console.log(item.getState());
+item.publishDoc()
+item.deleteDoc()
+console.log(item.getState());
 
 // Console log
 
-{ id: 1, sum: 10000 }
-    Попытка получить данные платежа!
-    undefined
+<ref *1> DraftDocumentItemState {
+  name: 'DraftDocument',
+  item: DocumentItem { state: [Circular *1], text: 'Мой пост' }
+}
+На сайт отправлен текст Мой пост
+<ref *1> PublishDocumentItemState {
+  name: 'PublishDocument',
+  item: DocumentItem { state: [Circular *1], text: 'Мой пост' }
+}
+Нельзя опубликовать опубликованный документ
+Снято с публикации
+<ref *1> DraftDocumentItemState {
+  name: 'DraftDocument',
+  item: DocumentItem { state: [Circular *1], text: 'Мой пост' }
+}
 ```
 
 ### - ([К списку других тем](#start))
