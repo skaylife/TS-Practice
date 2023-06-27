@@ -1,28 +1,12 @@
 # Проект - Утилита выполнения команд в TypeScript
 
-### Начало 20.06.2023 г. - конец **.06.2023 г.
+### Начало 20.06.2023 г. - конец 21.06.2023 г.
 
-### 8. Уроков суммарно
 
 [Вернуться на главную страницу "TS-Practice"](https://github.com/skaylife/TS-Practice)
 
 ## Содержание и быстрое перемещение по темам <a name="start">
 
-[1. Command-executer ](#1)
-
-[2. Mediator ](#2)
-
-[3. Command ](#3)
-
-[4. State  ](#4)
-
-[5. Strategy ](#5)
-
-[6. Iterator ](#6)
-
-[7. Template Method ](#7)
-
-[8. Observer ](#8)
 
 ## 1. Chain of Command <a name="1"></a> 
 
